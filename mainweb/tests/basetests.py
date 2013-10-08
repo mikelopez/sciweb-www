@@ -21,3 +21,19 @@ class BaseTestCase(TestCase):
 		
 	def tearDown(self):
 		pass
+
+    def create_website(self, **kwargs):
+        """Creates a website."""
+        if not kwargs:
+            kwargs = {'name': "domain%s.com" % randint(111,9999)}
+        w = Website(**kwargs)
+        w.save()
+        return w
+
+    def create_websitepage(self, **kwargs):
+        """Creates a website page."""
+        if not kwargs:
+            kwargs = {'name': "domain%s.com" % randint(111,9999)}
+        w = WebsitePage(**kwargs)
+        w.save()
+        return w
