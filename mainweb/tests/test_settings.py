@@ -4,8 +4,7 @@ when you run "manage.py test".
 
 Replace this with more appropriate tests for your application.
 """
-
-import settings
+from django.conf import settings
 import logging
 from os import path
 
