@@ -1,5 +1,5 @@
 import logging
-
+from random import randint
 from os import path
 from django.test import TestCase
 from django.conf import settings
