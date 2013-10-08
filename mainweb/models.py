@@ -6,7 +6,9 @@ SHOP_SEARCH = 'shopsearch'
 SHOP_COMPARE = 'shopcompare'
 SHOP_CATEGORY = 'shopcategory'
 
-STATIC_PAGES = ['products', 'articles' ]
+# static pages are pages that produce a list view with custom functionality
+STATIC_PAGES = ['products', 'articles']
+# static arg pages would be a detail view of an object, but require a pk value 
 STATIC_ARG_PAGES = ['p', 'search', 'a', 
                     SHOP_SEARCH, SHOP_COMPARE, SHOP_CATEGORY]
 
