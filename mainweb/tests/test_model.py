@@ -1,6 +1,5 @@
-from mainweb.basetests import *
-from mainweb.models import Website, WebsitePage
-from lib.mainlogger import LoggerLog
+from basetests import *
+from models import Website, WebsitePage
 
 
 class TestModelWebsite(TestCase):
