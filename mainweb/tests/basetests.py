@@ -13,14 +13,14 @@ from mainweb.models import Website, WebsitePage,\
 debug_filename = getattr(settings, 'SHOPZILLA_OUTPUT_FILE', '')
 
 class BaseTestCase(TestCase):
-	""" Base Test Class for Main Web Functions """
+    """ Base Test Class for Main Web Functions """
 
-	def setUp(self):
-		""" Check the settings """
+    def setUp(self):
+        """ Check the settings """
         pass
-		
-	def tearDown(self):
-		pass
+        
+    def tearDown(self):
+        pass
 
     def create_website(self, **kwargs):
         """Creates a website."""

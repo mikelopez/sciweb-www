@@ -2,7 +2,7 @@ from basetests import *
 from mainweb.models import Website, WebsitePage
 
 
-class MainwebTestCase(TestCase):
+class MainwebTestCase(BaseTestCase):
     """
     Tests the mainweb app.
     Tests adding websites, websitepages & checking for sitepage rules.
