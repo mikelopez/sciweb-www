@@ -2,12 +2,10 @@ from basetests import *
 from mainweb.models import Website, WebsitePage
 
 
-class TestModelWebsite(TestCase):
+class MainwebTestCase(TestCase):
     """
-    Test the basic model classes
-    Should have the following:
-     - Website
-     - WebsitePage
+    Tests the mainweb app.
+    Tests adding websites, websitepages & checking for sitepage rules.
     """
     tables = [Website, WebsitePage]
     table_struct = []
