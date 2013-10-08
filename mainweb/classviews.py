@@ -1,14 +1,12 @@
 import logging
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView
 from django.shortcuts import render
-try:
-    from settings import LOG_ON
-except ImportError:
-    LOG_ON = False
+from django.conf import settings
+from models import Website, WebsitePage
+LOG_ON = getattr(settings, "LOG_ON", False)
 from lib.mainlogger import LoggerLog
 
-from models import Website, WebsitePage
-#from forms import *
+
 
 class AdminIndexView(TemplateView):
     """ Index Page View """
