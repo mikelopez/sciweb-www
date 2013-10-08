@@ -6,8 +6,8 @@ from django.conf import settings
 from nose.tools import assert_true, assert_equals, assert_false
 from django.core.exceptions import ValidationError
 
-from mainweb.models import Website, WebsitePage
-from settings import STATIC_PAGES, STATIC_ARG_PAGES
+from mainweb.models import Website, WebsitePage,\
+                          STATIC_PAGES, STATIC_ARG_PAGES
 from lib.mainlogger import LoggerLog
 
 
