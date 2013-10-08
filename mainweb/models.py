@@ -40,7 +40,7 @@ class Website(models.Model):
             return None
 
     def save(self, *args, **kwargs):
-        self.domain = self.domain.replace('http://', '').replace('/','').replace('www','').split(':')[0]
+        self.domain = self.domain.replace('http://', '').replace('/','').replace('www.','').split(':')[0]
         try:
             website = Website.objects.get(domain=self.domain)
             pass
