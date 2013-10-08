@@ -4,7 +4,6 @@ from django.shortcuts import render
 from django.conf import settings
 from models import Website, WebsitePage
 LOG_ON = getattr(settings, "LOG_ON", False)
-from lib.mainlogger import LoggerLog
 
 
 class AdminIndexView(TemplateView):
