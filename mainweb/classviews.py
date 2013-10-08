@@ -7,50 +7,67 @@ LOG_ON = getattr(settings, "LOG_ON", False)
 from lib.mainlogger import LoggerLog
 
 
-
 class AdminIndexView(TemplateView):
-    """ Index Page View """
+    """
+    The admin Index view.
+    """
     template_name = "mainweb/admin-index.html"
 
 
 # Websites
 class WebsiteView(ListView):
-    """ Website List Page View """
+    """
+    Shows the list of websites.
+    """
     model = Website
 
 class CreateWebsite(CreateView):
-    """ Create Website page view """
+    """
+    Create a new Website.
+    """
     model = Website
 
 class UpdateWebsite(UpdateView):
-    """ Update view """
+    """
+    Updates a website.
+    """
     model = Website
     
 class WebsiteDetailView(DetailView):
-    """ Website Detail Page View """
+    """
+    Website Detail Page View.
+    """
     queryset = Website.objects.all()
     def get_object(self, **kwargs):
-        object = super(WebsiteDetailView, self).get_object(**kwargs)
-        return object
+        obj = super(WebsiteDetailView, self).get_object(**kwargs)
+        return obj
 
 
 # Website Pages
 class WebsitePageView(ListView):
-    """ Website List Page View """
+    """
+    Shows a list of the website-pages.
+    """
     model = WebsitePage
 
 class CreateWebsitePage(CreateView):
-    """ Create Website page view """
+    """
+    Create a website-page.
+    """
     model = WebsitePage
 
 class UpdateWebsitePage(UpdateView):
-    """ Update view """
+    """
+    Updates a website page.
+    """
     model = WebsitePage
     
 class WebsitePageDetailView(DetailView):
-    """ Website Detail Page View """
+    """
+    Website-page detail view.
+    """
     queryset = WebsitePage.objects.all()
     def get_object(self, **kwargs):
-        object = super(WebsitePageDetailView, self).get_object(**kwargs)
-        return object
+        obj = super(WebsitePageDetailView, self).get_object(**kwargs)
+        return obj
 
