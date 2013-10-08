@@ -25,7 +25,7 @@ class BaseTestCase(TestCase):
     def create_website(self, **kwargs):
         """Creates a website."""
         if not kwargs:
-            kwargs = {'name': "domain%s.com" % randint(111,9999)}
+            kwargs = {'domain': "domain%s.com" % randint(111,9999)}
         w = Website(**kwargs)
         w.save()
         return w
@@ -33,7 +33,10 @@ class BaseTestCase(TestCase):
     def create_websitepage(self, **kwargs):
         """Creates a website page."""
         if not kwargs:
-            kwargs = {'name': "domain%s.com" % randint(111,9999)}
+            kwargs = {'name': "My Cool page" % randint(111,9999), 
+                      'website': self.create_website()}
+        if not kwargs.get('website'):
+            kwargs['website'] = self.create_website()
         w = WebsitePage(**kwargs)
         w.save()
         return w
