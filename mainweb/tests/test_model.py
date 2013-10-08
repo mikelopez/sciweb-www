@@ -67,14 +67,4 @@ class MainwebTestCase(TestCase):
         wp.save()
         self.assertEquals(wp.type, "sub-landing")
 
-
-
-
-
-
-
-
-        
-
-
-
+    
