@@ -49,13 +49,13 @@ class Website(models.Model):
 class WebsitePage(models.Model):
     """ 
     Represents a webpage on a particular website
-    setting index to be default 
+    Sets 'index' as default.
     Page Types:
-      - Static Arg: This is a static page that requires an argument
+      - Static Arg: This is a static page that requires a content_type and object_pk 
       - Static: Static pages are pages with a predefined method. E.g, products
           will search the products database and return products variable.
-          You can introduct new static pages with predefined methods for custom apps
-      - Sub-Landing: Defines a custom subpage or landing page at the top level or url (sitename.com/subpage) - 
+          You can introduce new static pages with predefined methods for custom apps
+      - Sub-Landing: A custom subpage or landing page at the top level or url (sitename.com/subpage) - 
           this has to be a name that is not defined in as a "static" url. For example, a contact us page specific
           for the site you are making, or a landing page for marketing
 
@@ -120,12 +120,6 @@ class WebsitePage(models.Model):
         super(WebsitePage, self).save(*args, **kwargs)
 
 
-class ShopCategory(models.Model):
-    """
-    Categories list form shopzilla - top level 
-    """
-    name = models.CharField(max_length=40)
-    shop_id = models.CharField(max_length=15)
 
 
 
