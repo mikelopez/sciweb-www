@@ -48,8 +48,15 @@ class MainwebTestCase(TestCase):
         wp.save()
         self.assertEquals(wp.type, "static")
         
-
-
+    def test_sitepage_name_in_staticargpages(self):
+        """When the name of the sitepage is the name
+        of a static-arg-page, it will set the type to 
+        static-arg."""
+        wp = WebsitePage(website=self.create_website(),
+                        title="My site", name="products",
+                        template="index.html")
+        wp.save()
+        self.assertTrue(wp.type, 'static-arg')
 
 
 
