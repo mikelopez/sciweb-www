@@ -8,7 +8,6 @@ from django.core.exceptions import ValidationError
 
 from mainweb.models import Website, WebsitePage,\
                           STATIC_PAGES, STATIC_ARG_PAGES
-from lib.mainlogger import LoggerLog
 
 
 # Load settings stuff that we need
