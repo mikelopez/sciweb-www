@@ -1,5 +1,5 @@
 from basetests import *
-from models import Website, WebsitePage
+from mainweb.models import Website, WebsitePage
 
 
 class TestModelWebsite(TestCase):
