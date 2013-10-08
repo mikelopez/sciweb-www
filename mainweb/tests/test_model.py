@@ -53,10 +53,20 @@ class MainwebTestCase(TestCase):
         of a static-arg-page, it will set the type to 
         static-arg."""
         wp = WebsitePage(website=self.create_website(),
-                        title="My site", name="products",
+                        title="My site", name="search",
                         template="index.html")
         wp.save()
         self.assertTrue(wp.type, 'static-arg')
+
+    def test_sitepage_default_type(self):
+        """Tests the default type for a sitepage given the 
+        type is not selected."""
+        wp = WebsitePage(website=self.create_website(),
+                        title="My site", name="Somepage",
+                        template="index.html")
+        wp.save()
+        self.assertEquals(wp.type, "sub-landing")
+
 
 
 
