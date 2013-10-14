@@ -11,11 +11,11 @@ from basetests import *
 from mainweb.models import Website, WebsitePage
 
 class TestRequests(BaseTestCase):
-	"""
-	Tests the request process when an http request comes in.
-	"""
-	def setUp(self):
-		pass
+    """
+    Tests the request process when an http request comes in.
+    """
+    def setUp(self):
+        pass
 
     def test_get_website(self):
         """
@@ -24,4 +24,11 @@ class TestRequests(BaseTestCase):
         a value of a full URL like:
         http://www.sitename.com/whatever/else
         """
-        pass
+        request = {'HTTP_HOST': 'http://www.site.com/something'}
+        website = Website.objects.get_from_request(request)
+        self.assertEquals(website, None)
+        # add the site
+        self.create_website(domain='site.com')
+        website = Website.objects.get_from_request(request)
+        self.assertTrue(website)
+        self.assertTrue(website.count(), 1)
