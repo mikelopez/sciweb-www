@@ -1,18 +1,44 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
+from django.conf import settings
 
 SHOP_SEARCH = 'shopsearch'
 SHOP_COMPARE = 'shopcompare'
 SHOP_CATEGORY = 'shopcategory'
 
 # static pages are pages that produce a list view with custom functionality
-STATIC_PAGES = ['products', 'articles']
+sp = ['products', 'articles']
 # static arg pages would be a detail view of an object, but require a pk value 
-STATIC_ARG_PAGES = ['p', 'search', 'a', 
-                    SHOP_SEARCH, SHOP_COMPARE, SHOP_CATEGORY]
+sap = ['p', 'search', 'a', 
+       SHOP_SEARCH, SHOP_COMPARE, SHOP_CATEGORY]
+
+STATIC_PAGES = getattr(settings, "STATIC_PAGES", sp)
+STATIC_ARG_PAGES = getattr(settings, "STATIC_ARG_PAGES", sap)
 
 blankfield = {'blank': True, 'null': True}
+
+class WebsiteManager(models.Manager):
+    """Model manager for Website."""
+    @classmethod
+    def get_from_request(self, request):
+        """Gets the website from request HTTP_HOST key"""
+        try:
+            sitename = request.get('HTTP_HOST')
+        except AttributeError:
+            sitename = None
+        # if request.get returned None
+        if not sitename:
+            sitename = request.META.get('HTTP_HOST')
+        domain_string = sitename.split(':')[0]
+        if not domain_string:
+            return None
+        try:
+            ws = Website.objects.get(domain=domain_string)
+        except Website.DoesNotExist:
+            return None
+        return ws
+
 
 class Website(models.Model):
     """
@@ -22,7 +48,7 @@ class Website(models.Model):
     meta_desc = models.TextField(**blankfield)
     meta_key = models.TextField(**blankfield)
     notes = models.TextField(**blankfield)
-
+    objects = WebsiteManager()
     def __str__(self):
         return str(self.domain)
 
