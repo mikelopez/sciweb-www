@@ -24,7 +24,7 @@ class Website(models.Model):
     notes = models.TextField(**blankfield)
 
     def __str__(self):
-        return self.domain
+        return str(self.domain)
 
     def __unicode__(self):
         return self.domain

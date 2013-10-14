@@ -5,7 +5,6 @@ setup(
     name='sciweb-www',
     version='0.1',
     description="sciweb-www Description",
-    long_description=open('README.md', 'r').read(),
     keywords='',
     author='',
     author_email='',
