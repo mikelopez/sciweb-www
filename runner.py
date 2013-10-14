@@ -5,11 +5,12 @@ PROJECT_ROOTDIR = os.path.realpath(os.path.dirname(__file__))
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 
 sys.path.insert(0, os.path.join(PROJECT_PATH, ''))
-sys.path.insert(1, os.path.join(PROJECT_PATH, 'apps'))
+#sys.path.insert(1, os.path.join(PROJECT_PATH, 'apps'))
 settings.configure(DEBUG=True,
                   DATABASES={
                         'default': {
                             'ENGINE': 'django.db.backends.sqlite3',
+                            'NAME': 'dbtestdata.sqlite',
                         }
                   },
                   ROOT_URLCONF='mainweb.urls',
@@ -21,6 +22,6 @@ settings.configure(DEBUG=True,
 
 from django.test.simple import DjangoTestSuiteRunner
 test_runner = DjangoTestSuiteRunner(verbosity=1)
-failures = test_runner.run_tests(['mainweb', ])
+failures = test_runner.run_tests(['mainweb'])
 if failures:
     sys.exit(failures)

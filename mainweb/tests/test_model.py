@@ -75,3 +75,7 @@ class MainwebTestCase(BaseTestCase):
         w = Website(domain="http://www.somewebsite.com")
         w.save()
         self.assertEquals(getattr(w, 'domain'), 'somewebsite.com')
+
+    def test_pagetypes(self):
+        """Checks for the right page types for WebsitePage. """
+        pass
