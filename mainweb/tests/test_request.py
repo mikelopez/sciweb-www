@@ -24,11 +24,11 @@ class TestRequests(BaseTestCase):
         a value of a full URL like:
         http://www.sitename.com/whatever/else
         """
-        request = {'HTTP_HOST': 'http://www.site.com/something'}
+        request = {'HTTP_HOST': 'http://www.site.com/'}
         website = Website.objects.get_from_request(request)
         self.assertEquals(website, None)
         # add the site
-        self.create_website(domain='site.com')
+        w = self.create_website(domain='site.com')
         website = Website.objects.get_from_request(request)
         self.assertTrue(website)
-        self.assertTrue(website.count(), 1)
+        self.assertEquals(getattr(website, 'domain', 'x'), 'site.com')

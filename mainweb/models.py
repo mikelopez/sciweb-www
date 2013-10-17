@@ -30,11 +30,15 @@ class WebsiteManager(models.Manager):
         # if request.get returned None
         if not sitename:
             sitename = request.META.get('HTTP_HOST')
-        domain_string = sitename.split(':')[0]
-        if not domain_string:
+        
+        domain = sitename.replace('http://', '').replace('www.', '').replace('/','')
+        if not domain:
             return None
+
+        # filter out any dev ports
+        domain = domain.split(':')[0]
         try:
-            ws = Website.objects.get(domain=domain_string)
+            ws = Website.objects.get(domain=domain)
         except Website.DoesNotExist:
             return None
         return ws
@@ -49,11 +53,12 @@ class Website(models.Model):
     meta_key = models.TextField(**blankfield)
     notes = models.TextField(**blankfield)
     objects = WebsiteManager()
+    
     def __str__(self):
         return str(self.domain)
 
     def __unicode__(self):
-        return self.domain
+        return unicode(self.domain)
 
     def get_absolute_url(self):
         return reverse('website-detail', kwargs={'pk': self.pk})
