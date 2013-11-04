@@ -243,25 +243,19 @@ class PageProcessor(object):
         """
         If template does is none, raise PageProcessor exception
         """
-        #if not self.template:
-        #   raise PageProcessorException('PageProcessor: Template is not set')
-        #try:
         template_filename = self.websitepage.template
+        searchpath = '%s/domains/%s/%s' % (TEMPLATE_PATH, 
+                                           self.website.domain, 
+                                           template_filename)
         # if custom domain doesnt exist
-        if os.path.exists("%s/domains/%s/%s" % (TEMPLATE_PATH, self.website.domain, template_filename)):
+        if os.path.exists(searchpath):
             self.logger.write('Custom path domains exists, using that template!')
-            return "%s/domains/%s/%s" % (TEMPLATE_PATH, self.website.domain, template_filename)
+            return searchpath
         else:
-            self.logger.write('Custom path domains NOT exists, using default')
-            if os.path.exists("%s/%s" % (TEMPLATE_PATH, template_filename)):
-                return "%s/%s" % (TEMPLATE_PATH, template_filename)
-            else:
-                self.logger.write('NOT FOUND default template %s/%s' % (TEMPLATE_PATH, template_filename))
-                raise PageProcessorException('No Page Found %s/%s' % (TEMPLATE_PATH, template_filename))
+            self.logger.write('NOT FOUND default template %s' % (searchpath)
+            raise PageProcessorException('No Page Found %s' % (searchpath)
 
-        #except Exception as e:
-        #    self.logger.write("Exception %s" % e)
-        #    raise PageProcessorException('Exception %s' % e)
+        
 
     
         
