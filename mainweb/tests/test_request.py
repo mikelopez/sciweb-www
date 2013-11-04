@@ -20,7 +20,7 @@ class TestRequests(BaseTestCase):
     def test_get_website(self):
         """
         Simulate a request and get the website.
-        The request must contain HTTP_HOST key with
+        The request will contain HTTP_HOST key with
         a value of a full URL like:
         http://www.sitename.com/whatever/else
         """
