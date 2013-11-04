@@ -15,10 +15,10 @@ def index(request, linkname=None, filtername=None):
     # loggerlog = LoggerLog(log=LOG_ON, loggerlog=logging.getLogger("view_index"))
     page = PageProcessor(request, linkname, filtername)
     try:
-        loggerlog.write(page.get_template())
+        #loggerlog.write(page.get_template())
         return render(request, page.get_template(), page.context())
     except PageProcessorException:
-        loggerlog.write('Using default template index.html')
+        #loggerlog.write('Using default template index.html')
         return render(request, 'mainweb/index.html', page.context())
 
 def robots(request):
