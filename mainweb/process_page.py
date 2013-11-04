@@ -23,6 +23,7 @@ STATIC_URL = getattr(settings, 'STATIC_URL', None)
 SHOPZILLA_TOKEN = getattr(settings, 'SHOPZILLA_TOKEN', None)
 SHOPZILLA_PUB_TOKEN = getattr(settings, 'SHOPZILLA_PUB_TOKEN', None)
 SHOPZILLA_OUTPUT_FILE = getattr(settings, 'SHOPZILLA_OUTPUT_FILE', None)
+SHOPZILLA_SEARCH_FREQUENCY = getattr(settings, 'SHOPZILLA_SEARCH_FREQUENCY', None)
 SHOP_SEARCH = getattr(settings, 'SHOP_SEARCH', None)
 SHOP_COMPARE = getattr(settings, 'SHOP_COMPARE', None)
 
@@ -137,31 +138,38 @@ class PageProcessor(object):
         for a specific page type
         static-arg will need to have filtername set
         """
+        SSFQ = SHOPZILLA_SEARCH_FREQUENCY
+        RS = RecentSearches
         if self.pagetype == 'static-arg':
             self.logger.write('Static ARG page')
             #self.static_arg_page()
             if self.linkname == SHOP_SEARCH:
                 searchfor = self.filtername
-                datesearch = (datetime.now() - timedelta(seconds=60*30))
-                rs = RecentSearches.objects.filter(search=searchfor, 
-                                                   placed__lt=datesearch, 
-                                                   network='shopzilla')
+                
+                rs = RS.objects.check_search(search=searchfor, 
+                                                         network='shopzilla')
                 if not rs:
-
-                self.logger.write('Searching shopzilla: %s' % self.filtername)
-                self.shopzilla_products, self.shopzilla_subcategories = \
-                        shopzilla_search(SHOPZILLA_PUB_TOKEN, 
-                                         SHOPZILLA_TOKEN, 
-                                         self.filtername, \
-                                         debug=True, 
-                                         debug_filename=SHOPZILLA_OUTPUT_FILE)
+                    self.logger.write('Searching shopzilla: %s' % self.filtername)
+                    self.shopzilla_products, self.shopzilla_subcategories = \
+                            shopzilla_search(SHOPZILLA_PUB_TOKEN, 
+                                             SHOPZILLA_TOKEN, 
+                                             self.filtername,
+                                             debug=True, 
+                                             debug_filename=SHOPZILLA_OUTPUT_FILE)
+                    rs = RS.objects.record_search(search=searchfor,
+                                                  network='shopzilla',
+                                                  response_data=self.shopzilla_products)
+                    rs.response_data = self.shopzilla_products
+                    rs.save()
+                else:
+                    self.shopzilla_products.response_data
 
             if self.linkname == SHOP_COMPARE:
                 self.logger.write('Searching shopzilla: %s' % self.filtername)
                 self.shopzilla_products, self.shopzilla_subcategories = \
                         shopzilla_compare(SHOPZILLA_PUB_TOKEN, 
                                           SHOPZILLA_TOKEN, 
-                                          self.filtername, \
+                                          self.filtername, 
                                           debug=True, 
                                           debug_filename=SHOPZILLA_OUTPUT_FILE)
 

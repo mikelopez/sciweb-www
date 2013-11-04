@@ -2,6 +2,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from datetime import datetime, timedelta
 
 SHOP_SEARCH = 'shopsearch'
 SHOP_COMPARE = 'shopcompare'
@@ -15,6 +16,7 @@ sap = ['p', 'search', 'a',
 
 STATIC_PAGES = getattr(settings, "STATIC_PAGES", sp)
 STATIC_ARG_PAGES = getattr(settings, "STATIC_ARG_PAGES", sap)
+SHOPZILLA_SEARCH_FREQUENCY = getattr(settings, "SHOPZILLA_SEARCH_FREQUENCY", 30)
 
 blankfield = {'blank': True, 'null': True}
 
@@ -154,5 +156,50 @@ class WebsitePage(models.Model):
 
 
 
+class RecentSearchesManager(models.Manager):
+    """Model manager for recent searches."""
+    @classmethod
+    def check_search(self, **kwargs):
+        """Explicit is better than implicit"""
+        if not kwargs:
+            return None
+        datesearch = datetime.now() - timedelta(seconds=60*SHOPZILLA_SEARCH_FREQUENCY)
+        r = RecentSearches.objects.filter(placed__gt=datesearch,
+                                          search=kwargs.get('search'),
+                                          network=kwargs.get('network', 'shopzilla'))
+        if r:
+            try:
+                return r[0]
+            except:
+                return None
+        else:
+            return None
 
+    @classmethod
+    def record_search(self, **kwargs):
+        """Explicit is better than implicit"""
+        if not kwargs:
+            return None
+        if not kwargs.get('ip'):
+            return None
+        r = RecentSearches(placed=datetime.now(),
+                           search=kwargs.get('search'),
+                           network=kwargs.get('network', 'shopzilla'),
+                           ip=kwargs.get('ip'),
+                           response_data=kwargs.get('response_data'))
+        r.save()
+        return r
+
+
+
+
+class RecentSearches(models.Model):
+    """Recent searches will be recorded and re-queried
+    every 'x' minutes to avoid spammers and assholes."""
+    search = models.CharField(max_length=50)
+    placed = models.DateTimeField(default=datetime.now())
+    network = models.CharField(max_length=50)
+    ip = models.CharField(max_length=20)
+    response_data = models.TextField(blank=True, null=True)
+    objects = RecentSearchesManager()
 

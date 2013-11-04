@@ -83,22 +83,21 @@ class MainwebTestCase(BaseTestCase):
         """Test a recent search log and capture."""
         allow = False
         searchfor = "caca"
-        halfhourago = datetime.now() - timedelta(seconds=60*30)
-        kwargs = {'network': 'test1', 'search': searchfor, 
-                  'placed__lt': halfhourago}
+        kwargs = {'network': 'test1', 'search': searchfor}
         # check search - should not find
-        r = RecentSearches.check_search(**kwargs)
+        r = RecentSearches.objects.check_search(**kwargs)
         self.assertFalse(r)
         # now add it
         savedata = kwargs.copy()
-        del savedata['placed__lt'] 
+        savedata['ip'] = '127.0.0.1'
         r = RecentSearches.objects.record_search(**savedata)
+        self.assertTrue(r)
         # now we have one
-        r2 = RecentSearches.check_search(**kwargs)
+        r2 = RecentSearches.objects.check_search(**kwargs)
         self.assertTrue(r2)
         # now modify it to be an hour in the past
-        r2[0].placed = (datetime.now() - timedelta(seconds=60**2))
-        r2[0].save()
+        r2.placed = (datetime.now() - timedelta(seconds=60**2))
+        r2.save()
         # now should return nothing
         r3 = RecentSearches.objects.check_search(**kwargs)
         self.assertFalse(r3)

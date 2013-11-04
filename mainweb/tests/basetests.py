@@ -6,11 +6,12 @@ from django.conf import settings
 from nose.tools import assert_true, assert_equals, assert_false
 from django.core.exceptions import ValidationError
 from datetime import datetime, timedelta
-from mainweb.models import Website, WebsitePage, \
+from mainweb.models import Website, WebsitePage, RecentSearches, \
                           STATIC_PAGES, STATIC_ARG_PAGES
 
 
 debug_filename = getattr(settings, 'SHOPZILLA_OUTPUT_FILE', '')
+search_frequency = getattr(settings, "SHOPZILLA_SEARCH_FREQUENCY", 30)
 
 class BaseTestCase(TestCase):
     """ Base Test Class for Main Web Functions """
