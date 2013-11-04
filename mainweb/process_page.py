@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse, resolve
 from django.template import RequestContext, loader, Context
 from datetime import datetime
 
-from mainweb.models import Website, WebsitePage, ShopCategory
+from mainweb.models import Website, WebsitePage
 #from products.models import Product
 from lib.mainlogger import LoggerLog
 from utils import get_meta_domain, shopzilla_search, shopzilla_compare
@@ -62,7 +62,7 @@ class PageProcessor(object):
     template_dir = None
 
     shopzilla_products = None
-    shopzilla_categories = ShopCategory.objects.all()
+    shopzilla_categories = []
     shopzilla_subcategories = []
 
     logger = LoggerLog(log=LOG_ON, loggerlog=logging.getLogger('mainweb.process_page'))
