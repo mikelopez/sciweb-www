@@ -32,3 +32,5 @@ class TestRequests(BaseTestCase):
         website = Website.objects.get_from_request(request)
         self.assertTrue(website)
         self.assertEquals(getattr(website, 'domain', 'x'), 'site.com')
+
+        
