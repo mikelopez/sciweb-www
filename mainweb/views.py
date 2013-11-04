@@ -11,8 +11,8 @@ def index(request, linkname=None, filtername=None):
     optional linkname: sitename.com/linkname - loads website page with name "linkname"
     optional filtername: sitename.com/product/12 - product page ID 12
     """
-    #setsession(request, linkname, filtername)
-    loggerlog = LoggerLog(log=LOG_ON, loggerlog=logging.getLogger("view_index"))
+    # setsession(request, linkname, filtername)
+    # loggerlog = LoggerLog(log=LOG_ON, loggerlog=logging.getLogger("view_index"))
     page = PageProcessor(request, linkname, filtername)
     try:
         loggerlog.write(page.get_template())
