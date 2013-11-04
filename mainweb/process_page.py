@@ -252,8 +252,8 @@ class PageProcessor(object):
             self.logger.write('Custom path domains exists, using that template!')
             return searchpath
         else:
-            self.logger.write('NOT FOUND default template %s' % (searchpath)
-            raise PageProcessorException('No Page Found %s' % (searchpath)
+            self.logger.write('NOT FOUND default template %s' % (searchpath))
+            raise PageProcessorException('No Page Found %s' % (searchpath))
 
         
 
