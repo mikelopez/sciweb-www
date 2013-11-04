@@ -86,7 +86,6 @@ class MainwebTestCase(BaseTestCase):
         halfhourago = datetime.now() - timedelta(seconds=60*30)
         kwargs = {'network': 'test1', 'search': searchfor, 
                   'placed__lt': halfhourago}
-
         # check search - should not find
         r = RecentSearches.check_search(**kwargs)
         self.assertFalse(r)
@@ -102,5 +101,6 @@ class MainwebTestCase(BaseTestCase):
         r2[0].save()
         # now should return nothing
         r3 = RecentSearches.objects.check_search(**kwargs)
+        self.assertFalse(r3)
 
 
