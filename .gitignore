@@ -5,4 +5,5 @@
 *dist*
 *.sqlite*
 *local_settings.py*
-*.sqp
+*.swp
+*domains*
