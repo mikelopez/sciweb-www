@@ -3,7 +3,8 @@ from django.conf import settings
 from django.views.generic import TemplateView, ListView, DetailView, CreateView
 from mainweb.views import AdminIndexView, \
         CreateWebsite, UpdateWebsite, WebsiteView, WebsiteDetailView, \
-        CreateWebsitePage, UpdateWebsitePage, WebsitePageView, WebsitePageDetailView
+        CreateWebsitePage, UpdateWebsitePage, WebsitePageView, WebsitePageDetailView, \
+        UpdateRecentSearches, RecentSearchesDetailView, RecentSearchesView
         
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -31,6 +32,11 @@ urlpatterns = patterns('',
     url(r'^sitepage/update', UpdateWebsitePage.as_view(), name="websitepage-update"),
     url(r'^sitepage/(?P<pk>\d+)', WebsitePageDetailView.as_view(), name="websitepage-detail"),
     url(r'^sitepage/', WebsitePageView.as_view(), name="websitepage-view"),
+    
+    #url(r'^recentsearch/add', CreateWebsitePage.as_view(), name="recentsearches-add"),
+    url(r'^recentsearch/update', UpdateRecentSearches.as_view(), name="recentsearches-update"),
+    url(r'^recentsearch/(?P<pk>\d+)', RecentSearchesDetailView.as_view(), name="recentsearches-detail"),
+    url(r'^recentsearch/', RecentSearchesView.as_view(), name="recentsearches-view"),
     
 
     #(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root':'%s/static/' % (PROJECT_ROOTDIR), 'show_indexes': True}),

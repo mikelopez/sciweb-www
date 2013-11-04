@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse, resolve
 from django.template import RequestContext, loader, Context
 from datetime import datetime
 
-from mainweb.models import Website, WebsitePage
+from mainweb.models import Website, WebsitePage, RecentSearches
 #from products.models import Product
 from lib.mainlogger import LoggerLog
 from utils import get_meta_domain, shopzilla_search, shopzilla_compare
@@ -158,11 +158,12 @@ class PageProcessor(object):
                                              debug_filename=SHOPZILLA_OUTPUT_FILE)
                     rs = RS.objects.record_search(search=searchfor,
                                                   network='shopzilla',
-                                                  response_data=self.shopzilla_products)
+                                                  response_data=self.shopzilla_products,
+                                                  ip=self.request.META.get('REMOTE_ADDR'))
                     rs.response_data = self.shopzilla_products
                     rs.save()
                 else:
-                    self.shopzilla_products.response_data
+                    self.shopzilla_products = rs.response_data
 
             if self.linkname == SHOP_COMPARE:
                 self.logger.write('Searching shopzilla: %s' % self.filtername)

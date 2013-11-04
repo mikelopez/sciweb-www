@@ -2,7 +2,7 @@ import logging
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView
 from django.shortcuts import render
 from django.conf import settings
-from models import Website, WebsitePage
+from models import Website, WebsitePage, RecentSearches
 LOG_ON = getattr(settings, "LOG_ON", False)
 
 
@@ -68,5 +68,33 @@ class WebsitePageDetailView(DetailView):
     queryset = WebsitePage.objects.all()
     def get_object(self, **kwargs):
         obj = super(WebsitePageDetailView, self).get_object(**kwargs)
+        return obj
+
+# Website Pages
+class RecentSearchesView(ListView):
+    """
+    Shows a list of the website-pages.
+    """
+    model = RecentSearches
+
+class CreateRecentSearches(CreateView):
+    """
+    Create a website-page.
+    """
+    model = RecentSearches
+
+class UpdateRecentSearches(UpdateView):
+    """
+    Updates a website page.
+    """
+    model = RecentSearches
+    
+class RecentSearchesDetailView(DetailView):
+    """
+    Website-page detail view.
+    """
+    queryset = RecentSearches.objects.all()
+    def get_object(self, **kwargs):
+        obj = super(RecentSearchesDetailView, self).get_object(**kwargs)
         return obj
 

@@ -2,16 +2,17 @@
 
 {% block title %}Websites{% endblock %}
 {% block heading %}Websites{% endblock %}
+{% block website-tab %}active{% endblock %}
 
 {% block table_list %}
 
   <table class="table table-bordered" style="width:100%;">
-    <tr><td>Domain</td><td>Meta Keywords</td><td>Meta Description</td></tr>
+    <tr><td>Domain</td><td>Active</td></tr>
     {% for i in object_list %}
     <tr>
       <td><a href="/mainweb/website/{{i.id}}">{{ i.domain }}</a> </td>
-      <td>{{ i.meta_key }} </td>
-      <td>{{ i.meta_desc }}</td>
+      <td>{% if i.active %}<span class="label label-success">Active</span>{% else %}<span class="label label-danger">Inactive</span>{% endif %} </td>
+      
     </tr>
     {% endfor %}
    </table>

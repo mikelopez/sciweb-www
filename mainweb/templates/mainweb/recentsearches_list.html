@@ -1,0 +1,28 @@
+r{% extends "mainweb/mainweb-base.html" %}
+
+{% block title %}Recent Searches{% endblock %}
+{% block heading %}Recent Searches{% endblock %}
+{% block recentsearches-tab %}active{% endblock %}
+
+{% block table_list %}
+
+  <table class="table table-bordered" style="width:100%;">
+    <tr>
+      <td>Search for</td><td>Date of Search</td><td>IP Address</td>
+      <td>Website / Network</td>
+    </tr>
+    {% for i in object_list %}
+    <tr>
+      <td><a href="/mainweb/website/{{i.id}}">{{ i.search }}</a> </td>
+      <td>{{ i.placed }} </td>
+      <td>{{ i.ip }}</td>
+      <td>{{i.network}}</td>
+    </tr>
+    {% endfor %}
+   </table>
+
+ {% endblock %}
+
+
+ {% block action_button %}
+    {% endblock %}

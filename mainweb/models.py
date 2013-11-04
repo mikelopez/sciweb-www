@@ -54,6 +54,7 @@ class Website(models.Model):
     meta_desc = models.TextField(**blankfield)
     meta_key = models.TextField(**blankfield)
     notes = models.TextField(**blankfield)
+    active = models.NullBooleanField(default=True)
     objects = WebsiteManager()
     
     def __str__(self):
@@ -103,6 +104,8 @@ class WebsitePage(models.Model):
 
     website = models.ForeignKey('Website')
     title = models.CharField(max_length=50, default='')
+    meta_desc = models.TextField(**blankfield)
+    meta_key = models.TextField(**blankfield)
     name = models.CharField(max_length=20, default='index')
     type = models.CharField(max_length=15, choices=PAGETYPES, default='sub-landing')
     template = models.CharField(max_length=50, blank=True, null=True)
@@ -189,8 +192,6 @@ class RecentSearchesManager(models.Manager):
                            response_data=kwargs.get('response_data'))
         r.save()
         return r
-
-
 
 
 class RecentSearches(models.Model):
