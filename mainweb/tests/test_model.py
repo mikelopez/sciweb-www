@@ -84,8 +84,8 @@ class MainwebTestCase(BaseTestCase):
         allow = False
         searchfor = "caca"
         halfhourago = datetime.now() - timedelta(seconds=60*30)
-        kwargs = {network: 'test1', search: searchfor, 
-                  placed__lt: halfhourago}
+        kwargs = {'network': 'test1', 'search': searchfor, 
+                  'placed__lt': halfhourago}
 
         # check search - should not find
         r = RecentSearches.check_search(**kwargs)
