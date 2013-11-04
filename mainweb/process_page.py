@@ -141,16 +141,29 @@ class PageProcessor(object):
             self.logger.write('Static ARG page')
             #self.static_arg_page()
             if self.linkname == SHOP_SEARCH:
+                searchfor = self.filtername
+                datesearch = (datetime.now() - timedelta(seconds=60*30))
+                rs = RecentSearches.objects.filter(search=searchfor, 
+                                                   placed__lt=datesearch, 
+                                                   network='shopzilla')
+                if not rs:
+
                 self.logger.write('Searching shopzilla: %s' % self.filtername)
-                self.shopzilla_products, self.shopzilla_subcategories = shopzilla_search(\
-                        SHOPZILLA_PUB_TOKEN, SHOPZILLA_TOKEN, self.filtername, \
-                        debug=True, debug_filename=SHOPZILLA_OUTPUT_FILE)
+                self.shopzilla_products, self.shopzilla_subcategories = \
+                        shopzilla_search(SHOPZILLA_PUB_TOKEN, 
+                                         SHOPZILLA_TOKEN, 
+                                         self.filtername, \
+                                         debug=True, 
+                                         debug_filename=SHOPZILLA_OUTPUT_FILE)
 
             if self.linkname == SHOP_COMPARE:
                 self.logger.write('Searching shopzilla: %s' % self.filtername)
-                self.shopzilla_products, self.shopzilla_subcategories = shopzilla_compare(\
-                        SHOPZILLA_PUB_TOKEN, SHOPZILLA_TOKEN, self.filtername, \
-                        debug=True, debug_filename=SHOPZILLA_OUTPUT_FILE)
+                self.shopzilla_products, self.shopzilla_subcategories = \
+                        shopzilla_compare(SHOPZILLA_PUB_TOKEN, 
+                                          SHOPZILLA_TOKEN, 
+                                          self.filtername, \
+                                          debug=True, 
+                                          debug_filename=SHOPZILLA_OUTPUT_FILE)
 
         if self.pagetype == 'static':
             #self.static_page()
