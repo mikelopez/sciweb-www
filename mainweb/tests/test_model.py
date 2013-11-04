@@ -6,7 +6,7 @@ class MainwebTestCase(BaseTestCase):
     Tests the mainweb app.
     Tests adding websites, websitepages & checking for sitepage rules.
     """
-    tables = [Website, WebsitePage, ShopCategory]
+    tables = [Website, WebsitePage]
     table_struct = []
 
     default_website = None
