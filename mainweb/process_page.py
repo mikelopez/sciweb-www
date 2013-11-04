@@ -14,8 +14,17 @@ from utils import get_meta_domain, shopzilla_search, shopzilla_compare
 import logging
 import os
 
-from settings import STATIC_PAGES, PROJECT_ROOTDIR, STATIC_ARG_PAGES, TEMPLATE_PATH, STATIC_URL, \
-SHOPZILLA_TOKEN, SHOPZILLA_PUB_TOKEN, SHOPZILLA_OUTPUT_FILE, SHOP_SEARCH, SHOP_COMPARE
+from django.conf import settings
+STATIC_PAGES = getattr(settings, 'STATIC_PAGES', None)
+PROJECT_ROOTDIR = getattr(settings, 'PROJECT_ROOTDIR', None)
+STATIC_ARG_PAGES = getattr(settings, 'STATIC_ARG_PAGES', None)
+TEMPLATE_PATH = getattr(settings, 'TEMPLATE_PATH', None)
+STATIC_URL = getattr(settings, 'STATIC_URL', None)
+SHOPZILLA_TOKEN = getattr(settings, 'SHOPZILLA_TOKEN', None)
+SHOPZILLA_PUB_TOKEN = getattr(settings, 'SHOPZILLA_PUB_TOKEN', None)
+SHOPZILLA_OUTPUT_FILE = getattr(settings, 'SHOPZILLA_OUTPUT_FILE', None)
+SHOP_SEARCH = getattr(settings, 'SHOP_SEARCH', None)
+SHOP_COMPARE = getattr(settings, 'SHOP_COMPARE', None)
 
 try:
     from settings import LOG_ON
