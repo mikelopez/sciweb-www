@@ -11,7 +11,7 @@
 {% block websitepage-tab %}active{% endblock %}
 
 
-{% block form_submit_to %}{% url websitepage-add %}{% endblock %}
+{% block form_submit_to %}{% url 'websitepage_add' %}{% endblock %}
 
 {% block add_websitepage_form %}
     <table width="650">
@@ -22,5 +22,5 @@
 
 {% block action_button %}
     <input type="button" class="btn btn-info pull-right" value="View Website Pages" 
-                onclick="window.location='{% url websitepage-view %}';"/>
+                onclick="window.location='{% url 'websitepage_view' %}';"/>
 {% endblock %}

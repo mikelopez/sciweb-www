@@ -10,7 +10,7 @@ from datetime import datetime
 
 from mainweb.models import Website, WebsitePage, RecentSearches
 #from products.models import Product
-from lib.mainlogger import LoggerLog
+#from lib.mainlogger import LoggerLog
 from utils import get_meta_domain, shopzilla_search, shopzilla_compare
 import logging
 import os
@@ -76,8 +76,6 @@ class PageProcessor(object):
     shopzilla_categories = []
     shopzilla_subcategories = []
 
-    logger = LoggerLog(log=LOG_ON, loggerlog=logging.getLogger('mainweb.process_page'))
-
     def __init__(self, request, linkname, filtername):
         """
         Process the request, if request not found, page processor exception is raised
@@ -142,7 +140,6 @@ class PageProcessor(object):
         SSFQ = SHOPZILLA_SEARCH_FREQUENCY
         RS = RecentSearches
         if self.pagetype == 'static-arg':
-            self.logger.write('Static ARG page')
             #self.static_arg_page()
             if self.linkname == SHOP_SEARCH:
                 searchfor = self.filtername
@@ -150,7 +147,6 @@ class PageProcessor(object):
                 rs = RS.objects.check_search(search=searchfor, 
                                              network='shopzilla')
                 if not rs:
-                    self.logger.write('Searching shopzilla: %s' % self.filtername)
                     self.shopzilla_products, self.shopzilla_subcategories = \
                             shopzilla_search(SHOPZILLA_PUB_TOKEN, 
                                              SHOPZILLA_TOKEN, 
@@ -169,7 +165,6 @@ class PageProcessor(object):
                     #print self.shopzilla_products
 
             if self.linkname == SHOP_COMPARE:
-                self.logger.write('Searching shopzilla: %s' % self.filtername)
                 self.shopzilla_products, self.shopzilla_subcategories = \
                         shopzilla_compare(SHOPZILLA_PUB_TOKEN, 
                                           SHOPZILLA_TOKEN, 
@@ -240,24 +235,20 @@ class PageProcessor(object):
         """
         get the domain name from request
         """
-        return get_meta_domain(self.request, logger=logging.getLogger('mainweb.process_page'))
+        return get_meta_domain(self.request)
 
     def get_product(self, product=None):
         """
         Get a product 
         """
-        if not product:
-            self.logger.write('process_page: return List get_product()')
-        self.logger.write('process_page: return Item get_product(item)')
+        pass            
 
     def get_article(self, article=None):
         """
         Get article 
         """
-        if not article:
-            self.logger.write('process_page: return List get_article()')
-        self.logger.write('process_page: return Item get_article(item)')
-
+        pass
+        
     def search(self):
         """
         Search.

@@ -64,7 +64,7 @@ class Website(models.Model):
         return unicode(self.domain)
 
     def get_absolute_url(self):
-        return reverse('website-detail', kwargs={'pk': self.pk})
+        return reverse('website_detail', kwargs={'pk': self.pk})
 
     def get_index_page(self):
         """ get the index page """
@@ -120,7 +120,7 @@ class WebsitePage(models.Model):
         return unicode("%s / %s" % (self.website.domain, self.name))
 
     def get_absolute_url(self):
-        return reverse('websitepage-detail', kwargs={'pk': self.pk})
+        return reverse('websitepage_detail', kwargs={'pk': self.pk})
 
     def save(self, *args, **kwargs):
         """ 

@@ -37,19 +37,19 @@
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
                 </a>
-                <a class="brand" href="{% url website-view %}">{% block project_name %}Sciweb - mainweb{% endblock %}</a>
+                <a class="brand" href="{% url 'website_view' %}">{% block project_name %}Sciweb - mainweb{% endblock %}</a>
                 <div class="nav-collapse">
                   <ul class="nav">
-                      <li><a href="{% url adminview %}">Home</a></li>
-                    <li class="{% block website-tab %}{% endblock %}"><a href="{% url website-view %}">Websites</a></li>
-                    <li class="{% block websitepage-tab %}{% endblock %}"><a href="{% url websitepage-view %}">Site Pages</a></li>
-                    <li class="{% block recentsearches-tab %}{% endblock %}"><a href="{% url recentsearches-view %}">Recent Searches</a></li>
+                      <li><a href="{% url 'adminview' %}">Home</a></li>
+                    <li class="{% block website-tab %}{% endblock %}"><a href="{% url 'website_view' %}">Websites</a></li>
+                    <li class="{% block websitepage-tab %}{% endblock %}"><a href="{% url 'websitepage_view' %}">Site Pages</a></li>
+                    <li class="{% block recentsearches-tab %}{% endblock %}"><a href="{% url 'recentsearches_view' %}">Recent Searches</a></li>
                     <li class="dropdown">
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown">Add <b class="caret"></b></a>
                       <ul class="dropdown-menu">
                          {% block add_stuff_dropdown %}
-                         <li><a href="{% url website-add %}">Add Website</a></li>
-                            <li><a href="{% url websitepage-add %}">Add Website Pages</a></li>
+                         <li><a href="{% url 'website_add' %}">Add Website</a></li>
+                            <li><a href="{% url 'websitepage_add' %}">Add Website Pages</a></li>
                          {% endblock %}
                         <!--li class="divider"></li>
                         <li><a href="#">Separated link</a></li-->
@@ -65,12 +65,12 @@
                     <li class="dropdown">
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown">Modules <b class="caret"></b></a>
                       <ul class="dropdown-menu">
-                        <li><a href="{% url website-view %}">MainWeb</a></li>
-                        <li><a href="{% url galleries-view %}">Rawdogger</a></li>
+                        <li><a href="{% url 'website_view' %}">MainWeb</a></li>
+                        <li><a href="{% url 'galleries_view' %}">Rawdogger</a></li>
                         
                         <li class="divider"></li>
  
-                        <li><a href="{% url adminview %}">Back to Admin Base</a></li>
+                        <li><a href="{% url 'adminview' %}">Back to Admin Base</a></li>
                       </ul>
                     </li>
                   </ul>
@@ -93,7 +93,8 @@
             
             {% block error_notification %}{% endblock %}
 
-            <form action="{% block form_submit_to %}#{% endblock %}" method="POST"> {% csrf_token %}
+            <form action="{% block form_submit_to %}#{% endblock %}" method="POST"> 
+                {% csrf_token %}
                 {% block add_website_form %} {% endblock %}
                 {% block add_websitepage_form %}{% endblock %}
             </form>
