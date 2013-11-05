@@ -1,3 +1,4 @@
+import simplejson
 from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -147,7 +148,7 @@ class PageProcessor(object):
                 searchfor = self.filtername
                 
                 rs = RS.objects.check_search(search=searchfor, 
-                                                         network='shopzilla')
+                                             network='shopzilla')
                 if not rs:
                     self.logger.write('Searching shopzilla: %s' % self.filtername)
                     self.shopzilla_products, self.shopzilla_subcategories = \
@@ -160,10 +161,12 @@ class PageProcessor(object):
                                                   network='shopzilla',
                                                   response_data=self.shopzilla_products,
                                                   ip=self.request.META.get('REMOTE_ADDR'))
-                    rs.response_data = self.shopzilla_products
+                    rs.response_data = simplejson.dumps(self.shopzilla_products)
+                    #print rs.response_data.__dict__
                     rs.save()
                 else:
-                    self.shopzilla_products = rs.response_data
+                    self.shopzilla_products = simplejson.loads(rs.response_data)
+                    #print self.shopzilla_products
 
             if self.linkname == SHOP_COMPARE:
                 self.logger.write('Searching shopzilla: %s' % self.filtername)

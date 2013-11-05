@@ -39,24 +39,26 @@ def shopzilla_search(pubtoken, token, search_for, debug=False, debug_filename=No
     shop.bidded_only()
     shop.contains_images()
     shop.read_response(debug=debug, debug_filename=debug_filename)
-    try: 
+    try:
         shop.parse_json()
+        print "!!!!!!!! PARSED JSON OK"
     except:
+        print "!!!!!!!!!!! FAILED TO PARSE JSON"
         shop.json_data = shop.response_data
 
     affiliated_products = shop.json_data
     try: 
         if not affiliated_products.get('products', None):
-            affiliated_products = {'products': {'product':[]} }
+            affiliated_products = {"products": {"product":[]} }
     except AttributeError:
-        affiliated_products = {'products': {'product':[]} }
+        affiliated_products = {"products": {"product":[]} }
 
     counter = 0  
-    for i in affiliated_products['products']['product']:
+    for i in affiliated_products["products"]["product"]:
         try: 
             rel = long(i['relevancy'])
-            affiliated_products['products']['product'][counter]['relevancy'] = rel  
-            affiliated_products['products']['product'][counter]['relevancy_string'] = str(rel)
+            affiliated_products["products"]["product"][counter]["relevancy"] = rel  
+            affiliated_products["products"]["product"][counter]["relevancy_string"] = str(rel)
         except KeyError:
             pass 
         counter += 1
