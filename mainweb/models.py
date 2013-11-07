@@ -204,3 +204,50 @@ class RecentSearches(models.Model):
     response_data = models.TextField(blank=True, null=True)
     objects = RecentSearchesManager()
 
+
+class RecentProductsManager(models.Manager):
+    """Model manager for recent searches."""
+    @classmethod
+    def check_search(self, **kwargs):
+        """Explicit is better than implicit"""
+        if not kwargs:
+            return None
+        # 24 hour requery
+        datesearch = datetime.now() - timedelta(seconds=60*24)
+        r = RecentProducts.objects.filter(placed__gt=datesearch,
+                                          product_id=kwargs.get('product_id'),
+                                          network=kwargs.get('network', 'shopzilla'))
+        if r:
+            try:
+                return r[0]
+            except:
+                return None
+        else:
+            return None
+
+    @classmethod
+    def record_search(self, **kwargs):
+        """Explicit is better than implicit"""
+        if not kwargs:
+            return None
+        if not kwargs.get('ip'):
+            return None
+        r = RecentProducts(placed=datetime.now(),
+                           product_id=kwargs.get('product_id'),
+                           network=kwargs.get('network', 'shopzilla'),
+                           ip=kwargs.get('ip'),
+                           response_data=kwargs.get('response_data'))
+        r.save()
+        return r
+
+
+class RecentProducts(models.Model):
+    """Recent searches will be recorded and re-queried
+    every 'x' minutes to avoid spammers and assholes."""
+    product_id = models.CharField(max_length=50)
+    placed = models.DateTimeField(default=datetime.now())
+    network = models.CharField(max_length=50)
+    ip = models.CharField(max_length=20)
+    response_data = models.TextField(blank=True, null=True)
+    objects = RecentProductsManager()
+

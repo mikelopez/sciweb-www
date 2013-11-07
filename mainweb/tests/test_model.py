@@ -102,4 +102,26 @@ class MainwebTestCase(BaseTestCase):
         r3 = RecentSearches.objects.check_search(**kwargs)
         self.assertFalse(r3)
 
+    def test_recent_products(self):
+        """Store the recent products viewed."""
+        allow = False
+        productid = 123123
+        kwargs = {'product_id': productid, 'network': 'test1'}
+        r = RecentProducts.objects.check_search(**kwargs)
+        self.assertFalse(r)
+        savedata = kwargs.copy()
+        savedata['ip'] = '127.0.0.1'
+        r = RecentProducts.objects.record_search(**savedata)
+        self.assertTrue(r)
+        # now we have one
+        r2 = RecentProducts.objects.check_search(**kwargs)
+        self.assertTrue(r2)
+        # now modify it to be an hour in the past
+        r2.placed = (datetime.now() - timedelta(seconds=60*24))
+        r2.save()
+        # now should return nothing
+        r3 = RecentProducts.objects.check_search(**kwargs)
+        self.assertFalse(r3)
+
+
 

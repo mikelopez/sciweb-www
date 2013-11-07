@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse, resolve
 from django.template import RequestContext, loader, Context
 from datetime import datetime
 
-from mainweb.models import Website, WebsitePage, RecentSearches
+from mainweb.models import Website, WebsitePage, RecentSearches, RecentProducts
 #from products.models import Product
 #from lib.mainlogger import LoggerLog
 from utils import get_meta_domain, shopzilla_search, shopzilla_compare
@@ -143,34 +143,45 @@ class PageProcessor(object):
             #self.static_arg_page()
             if self.linkname == SHOP_SEARCH:
                 searchfor = self.filtername
-                
-                rs = RS.objects.check_search(search=searchfor, 
-                                             network='shopzilla')
+                rs = RS.objects.check_search(search=searchfor, network='shopzilla')
                 if not rs:
-                    self.shopzilla_products, self.shopzilla_subcategories = \
+                    self.shopzilla_products, \
+                    self.shopzilla_subcategories = \
                             shopzilla_search(SHOPZILLA_PUB_TOKEN, 
                                              SHOPZILLA_TOKEN, 
                                              self.filtername,
                                              debug=True, 
                                              debug_filename=SHOPZILLA_OUTPUT_FILE)
                     rs = RS.objects.record_search(search=searchfor,
-                                                  network='shopzilla',
-                                                  response_data=self.shopzilla_products,
-                                                  ip=self.request.META.get('REMOTE_ADDR'))
-                    rs.response_data = simplejson.dumps(self.shopzilla_products)
-                    #print rs.response_data.__dict__
+                              network='shopzilla',
+                              ip=self.request.META.get('REMOTE_ADDR'),
+                              response_data=simplejson.dumps(self.shopzilla_products))
                     rs.save()
                 else:
+                    # dont query the API, load from the database ;)
                     self.shopzilla_products = simplejson.loads(rs.response_data)
-                    #print self.shopzilla_products
 
             if self.linkname == SHOP_COMPARE:
-                self.shopzilla_products, self.shopzilla_subcategories = \
-                        shopzilla_compare(SHOPZILLA_PUB_TOKEN, 
-                                          SHOPZILLA_TOKEN, 
-                                          self.filtername, 
-                                          debug=True, 
-                                          debug_filename=SHOPZILLA_OUTPUT_FILE)
+                searchfor = self.filtername
+                RP = RecentProducts
+                rp = RP.objects.check_search(product_id=searchfor, network='shopzilla')
+                if not rp:
+                    print "Not saved...."
+                    self.shopzilla_products, \
+                    self.shopzilla_subcategories = \
+                            shopzilla_compare(SHOPZILLA_PUB_TOKEN, 
+                                              SHOPZILLA_TOKEN, 
+                                              self.filtername, 
+                                              debug=True, 
+                                              debug_filename=SHOPZILLA_OUTPUT_FILE)
+                    rp = RP.objects.record_search(product_id=searchfor,
+                              network='shopzilla',
+                              ip=self.request.META.get('REMOTE_ADDR'),
+                              response_data=simplejson.dumps(self.shopzilla_products))
+                    rp.save()
+                else:
+                    print "Saved..."
+                    self.shopzilla_products = simplejson.loads(rp.response_data)
 
         if self.pagetype == 'static':
             #self.static_page()
@@ -253,7 +264,8 @@ class PageProcessor(object):
         """
         Search.
         """
-        self.logger.write('searching....')
+        pass
+        #self.logger.write('searching....')
 
     def get_template(self):
         """
@@ -265,10 +277,10 @@ class PageProcessor(object):
                                            template_filename)
         # if custom domain doesnt exist
         if os.path.exists(searchpath):
-            self.logger.write('Custom path domains exists, using that template!')
+            #self.logger.write('Custom path domains exists, using that template!')
             return searchpath
         else:
-            self.logger.write('NOT FOUND default template %s' % (searchpath))
+            #self.logger.write('NOT FOUND default template %s' % (searchpath))
             raise PageProcessorException('No Page Found %s' % (searchpath))
 
         

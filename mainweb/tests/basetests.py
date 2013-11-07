@@ -7,7 +7,7 @@ from nose.tools import assert_true, assert_equals, assert_false
 from django.core.exceptions import ValidationError
 from datetime import datetime, timedelta
 from mainweb.models import Website, WebsitePage, RecentSearches, \
-                          STATIC_PAGES, STATIC_ARG_PAGES
+                          RecentProducts, STATIC_PAGES, STATIC_ARG_PAGES
 
 
 debug_filename = getattr(settings, 'SHOPZILLA_OUTPUT_FILE', '')
