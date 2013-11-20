@@ -1,3 +1,6 @@
+"""
+Set the static class views for admin functionality.
+"""
 import logging
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView
 from django.shortcuts import render
@@ -70,7 +73,9 @@ class WebsitePageDetailView(DetailView):
         obj = super(WebsitePageDetailView, self).get_object(**kwargs)
         return obj
 
-# Website Pages
+
+
+# RecentSearches
 class RecentSearchesView(ListView):
     """
     Shows a list of the website-pages.

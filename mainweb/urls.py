@@ -24,7 +24,7 @@ urlpatterns = patterns('',
     url(r'^$', AdminIndexView.as_view(), name="adminview"),
 
     url(r'^website/add', CreateWebsite.as_view(), name="website_add"),
-    url(r'^website/update', UpdateWebsite.as_view(), name="website_update"),
+    url(r'^website/update/(?P<pk>\d+)', UpdateWebsite.as_view(), name="website_update"),
     url(r'^website/(?P<pk>\d+)', WebsiteDetailView.as_view(), name="website_detail"),
     url(r'^website/', WebsiteView.as_view(), name="website_view"),
 
@@ -37,6 +37,10 @@ urlpatterns = patterns('',
     url(r'^recentsearch/update', UpdateRecentSearches.as_view(), name="recentsearches_update"),
     url(r'^recentsearch/(?P<pk>\d+)', RecentSearchesDetailView.as_view(), name="recentsearches_detail"),
     url(r'^recentsearch/', RecentSearchesView.as_view(), name="recentsearches_view"),
+
+    url(r'^recentproducts/update', UpdateRecentSearches.as_view(), name="recentsearches_update"),
+    url(r'^recentproducts/(?P<pk>\d+)', RecentSearchesDetailView.as_view(), name="recentsearches_detail"),
+    url(r'^recentproducts/', RecentSearchesView.as_view(), name="recentsearches_view"),
     
 
     #(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root':'%s/static/' % (PROJECT_ROOTDIR), 'show_indexes': True}),
