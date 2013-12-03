@@ -89,7 +89,7 @@ class CreateRecentSearches(StaffuserRequiredMixin, CreateView):
     """
     model = RecentSearches
 
-class UpdateRecentSearches(StaffUserRequiredMixin, UpdateView):
+class UpdateRecentSearches(StaffuserRequiredMixin, UpdateView):
     """
     Updates a website page.
     """
