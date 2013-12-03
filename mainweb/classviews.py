@@ -6,10 +6,11 @@ from django.views.generic import TemplateView, ListView, DetailView, CreateView,
 from django.shortcuts import render
 from django.conf import settings
 from models import Website, WebsitePage, RecentSearches
+from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 LOG_ON = getattr(settings, "LOG_ON", False)
 
 
-class AdminIndexView(TemplateView):
+class AdminIndexView(StaffuserRequiredMixin, TemplateView):
     """
     The admin Index view.
     """
@@ -17,25 +18,25 @@ class AdminIndexView(TemplateView):
 
 
 # Websites
-class WebsiteView(ListView):
+class WebsiteView(StaffuserRequiredMixin, ListView):
     """
     Shows the list of websites.
     """
     model = Website
 
-class CreateWebsite(CreateView):
+class CreateWebsite(StaffuserRequiredMixin, CreateView):
     """
     Create a new Website.
     """
     model = Website
 
-class UpdateWebsite(UpdateView):
+class UpdateWebsite(StaffuserRequiredMixin, UpdateView):
     """
     Updates a website.
     """
     model = Website
     
-class WebsiteDetailView(DetailView):
+class WebsiteDetailView(StaffuserRequiredMixin, DetailView):
     """
     Website Detail Page View.
     """
@@ -46,25 +47,25 @@ class WebsiteDetailView(DetailView):
 
 
 # Website Pages
-class WebsitePageView(ListView):
+class WebsitePageView(StaffuserRequiredMixin, ListView):
     """
     Shows a list of the website-pages.
     """
     model = WebsitePage
 
-class CreateWebsitePage(CreateView):
+class CreateWebsitePage(StaffuserRequiredMixin, CreateView):
     """
     Create a website-page.
     """
     model = WebsitePage
 
-class UpdateWebsitePage(UpdateView):
+class UpdateWebsitePage(StaffuserRequiredMixin, UpdateView):
     """
     Updates a website page.
     """
     model = WebsitePage
     
-class WebsitePageDetailView(DetailView):
+class WebsitePageDetailView(StaffuserRequiredMixin, DetailView):
     """
     Website-page detail view.
     """
@@ -76,25 +77,25 @@ class WebsitePageDetailView(DetailView):
 
 
 # RecentSearches
-class RecentSearchesView(ListView):
+class RecentSearchesView(StaffuserRequiredMixin, ListView):
     """
     Shows a list of the website-pages.
     """
     model = RecentSearches
 
-class CreateRecentSearches(CreateView):
+class CreateRecentSearches(StaffuserRequiredMixin, CreateView):
     """
     Create a website-page.
     """
     model = RecentSearches
 
-class UpdateRecentSearches(UpdateView):
+class UpdateRecentSearches(StaffUserRequiredMixin, UpdateView):
     """
     Updates a website page.
     """
     model = RecentSearches
     
-class RecentSearchesDetailView(DetailView):
+class RecentSearchesDetailView(StaffuserRequiredMixin, DetailView):
     """
     Website-page detail view.
     """
