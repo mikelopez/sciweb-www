@@ -17,6 +17,7 @@ class AdminIndexView(StaffuserRequiredMixin, TemplateView):
     template_name = "mainweb/admin-index.html"
 
 
+
 # Websites
 class WebsiteView(StaffuserRequiredMixin, ListView):
     """
