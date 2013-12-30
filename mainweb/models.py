@@ -63,6 +63,10 @@ class Website(models.Model):
     def __unicode__(self):
         return unicode(self.domain)
 
+    @property 
+    def has_pages(self):
+        return self.websitepage_set.select_related()
+
     def get_absolute_url(self):
         return reverse('website_detail', kwargs={'pk': self.pk})
 

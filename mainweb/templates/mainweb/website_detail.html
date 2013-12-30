@@ -1,13 +1,38 @@
 {% extends "mainweb/mainweb-base.html" %}
 
 {% block title %}Website {{object.domain}}{% endblock %}
-{% block heading %}Website: {{object.domain}}{% endblock %}
+{% block heading %}
+	{% if object.active %} 
+		<i class="fa fa-power-off fa-1x" style="color:green;"></i>
+	{% else %}
+		<i class="fa fa-power-off fa-1x" style="color:red;"></i>
+	{% endif %}
+Website: {{object.domain}}{% endblock %}
 {% block website-tab %}active{% endblock %}
 
 {% block detail_view %}
-    Website: {{object.domain}}<hr />
-    Meta Keywords: {{object.meta_key}}<br />
-    Meta Description: {{object.meta_desc}}<hr />
+
+	
+	<div style="width:300px;float:left;font-size:13px;">
+    	<b>Website:</b> {{object.domain}}<br /> - {{object.notes}}<hr />
+    	<b>Meta Keywords:</b> {{object.meta_key}}<br />
+    	<b>Meta Description:</b> {{object.meta_desc}}<hr />
+    </div>
+    {% if object.has_pages %}
+	<div style="width:500px;float:right;margin-left:15px;">
+		<h4>Website Pages</h4>
+		<table class="table table-bordered table-striped" style="font-size:12px;">
+			{% for i in object.websitepage_set.select_related %}
+				<tr>
+					<td>{{i.name}}</td>
+					<td>{{i.title}}</td>
+					<td>{{i.type}}</td>
+					<td>{{i.template}}</td>
+				</tr>			
+			{% endfor %}
+		</table>
+	</div>
+	{% endif %}
 
 {% endblock %}
 

@@ -4,6 +4,7 @@ Set the static class views for admin functionality.
 import logging
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView
 from django.shortcuts import render
+from django.http import HttpResponseRedirect, HttpResponse
 from django.conf import settings
 from models import Website, WebsitePage, RecentSearches
 from forms import WebsiteForm, WebsitePageForm, RecentSearchesForm
@@ -50,7 +51,7 @@ class UpdateWebsite(StaffuserRequiredMixin, UpdateInstanceView):
     Updates a website.
     """
     model = Website
-    form_class = GalleryForm
+    form_class = WebsiteForm
     template_name = 'mainweb/website_update.html'
     def get_object(self, queryset=None):
         obj = Website.objects.get(id=self.kwargs['pk'])
@@ -84,6 +85,11 @@ class UpdateWebsitePage(StaffuserRequiredMixin, UpdateInstanceView):
     Updates a website page.
     """
     model = WebsitePage
+    form_class = WebsitePageForm
+    template_name = "mainweb/websitepage_update.html"
+    def get_object(self, queryset=None):
+        obj = WebsitePage.objects.get(id=self.kwargs['pk'])
+        return obj
     
 class WebsitePageDetailView(StaffuserRequiredMixin, DetailView):
     """
@@ -114,6 +120,8 @@ class UpdateRecentSearches(StaffuserRequiredMixin, UpdateInstanceView):
     Updates a website page.
     """
     model = RecentSearches
+    form_class = RecentSearchesForm
+    template_name = "mainweb/recentsearches_update.html"
     
 class RecentSearchesDetailView(StaffuserRequiredMixin, DetailView):
     """

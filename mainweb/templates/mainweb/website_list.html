@@ -6,11 +6,19 @@
 
 {% block table_list %}
 
-  <table class="table table-bordered" style="width:100%;">
-      <tr><td>Active</td><td>Domain</td><td>Notes</td></tr>
+  <table class="table table-bordered table-striped" style="width:100%;">
+      <tr><td></td><td></td><td>Domain</td><td>Notes</td></tr>
     {% for i in object_list %}
     <tr>
-      <td>{% if i.active %}<span class="label label-success">Active</span>{% else %}<span class="label label-danger">Inactive</span>{% endif %} </td>
+      <td><a href="{% url 'update_website' pk=i.id %}"><i class="fa fa-pencil"></i></a></td>
+      <td>
+      {% if i.active %}
+        <i class="fa fa-power-off fa-1x" style="color:green;"></i>
+        <!--span class="label label-success">Active</span-->
+      {% else %}
+      <i class="fa fa-power-off fa-1x" style="color:red;"></i>
+        <!--span class="label label-danger">Inactive</span-->
+      {% endif %} </td>
       <td><a href="/mainweb/website/{{i.id}}">{{ i.domain }}</a> </td>
       <td>{{i.notes}}</td>
     </tr>

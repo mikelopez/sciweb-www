@@ -1,0 +1,25 @@
+{% extends "mainweb/mainweb-base.html" %}
+
+{% block additional_css_overrides %}
+<style type="text/css">
+	textarea{ height:42px; width:300px;}
+</style>
+{% endblock %}
+
+{% block title %}Update site{% endblock %}
+{% block heading %}Update Website{% endblock %}
+{% block website-tab %}active{% endblock %}
+
+
+{% block form_submit_to %}{% url 'update_website' pk=object.id %}{% endblock %}
+{% block add_website_form %}
+    <table width="650">
+      {{form.as_table}}
+    </table>
+    <input type="submit" class="btn btn-success" value="Update Website" />
+ {% endblock %}
+
+{% block action_button %}
+    <input type="button" class="btn btn-info pull-right" value="View Websites" 
+                onclick="window.location='{% url 'website_view' %}';"/>
+{% endblock %}
