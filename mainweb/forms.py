@@ -1,8 +1,25 @@
-#from django import forms
+from django import forms
+from django.forms import ModelForm
+from models import Website, RecentSearches, WebsitePage
 
-#from django.contrib.auth.models import User, Group
-#from django.forms.util import ErrorList
-#from django.forms import ModelForm
-#from datetime import date, timedelta, datetime
-#from models import Website, WebsitePage
 
+class BaseForm(ModelForm):
+    """Providers Custom form"""
+    def __init__(self, *args, **kwargs):
+        super(BaseForm, self).__init__(*args, **kwargs)
+
+
+class WebsiteForm(BaseForm):
+    """Website Custom form"""
+    class Meta:
+        model = Website
+
+class WebsitePageForm(BaseForm):
+    """WebsitePage Custom form"""
+    class Meta:
+        model = WebsitePage
+
+class RecentSearchesForm(BaseForm):
+    """RecentSearches Custom form"""
+    class Meta:
+        model = RecentSearches

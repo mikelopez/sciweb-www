@@ -6,6 +6,7 @@ from django.views.generic import TemplateView, ListView, DetailView, CreateView,
 from django.shortcuts import render
 from django.conf import settings
 from models import Website, WebsitePage, RecentSearches
+from forms import WebsiteForm, WebsitePageForm, RecentSearchesForm
 from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 LOG_ON = getattr(settings, "LOG_ON", False)
 
@@ -49,6 +50,11 @@ class UpdateWebsite(StaffuserRequiredMixin, UpdateInstanceView):
     Updates a website.
     """
     model = Website
+    form_class = GalleryForm
+    template_name = 'mainweb/website_update.html'
+    def get_object(self, queryset=None):
+        obj = Website.objects.get(id=self.kwargs['pk'])
+        return obj
     
 class WebsiteDetailView(StaffuserRequiredMixin, DetailView):
     """
