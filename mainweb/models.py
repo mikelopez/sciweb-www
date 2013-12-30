@@ -11,7 +11,7 @@ SHOP_CATEGORY = 'shopcategory'
 # static pages are pages that produce a list view with custom functionality
 sp = ['products', 'articles']
 # static arg pages would be a detail view of an object, but require a pk value 
-sap = ['p', 'search', 'a', 
+sap = ['search', 'a', 'product', 
        SHOP_SEARCH, SHOP_COMPARE, SHOP_CATEGORY]
 
 STATIC_PAGES = getattr(settings, "STATIC_PAGES", sp)

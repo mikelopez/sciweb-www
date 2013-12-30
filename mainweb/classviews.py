@@ -10,6 +10,20 @@ from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 LOG_ON = getattr(settings, "LOG_ON", False)
 
 
+class UpdateInstanceView(UpdateView):
+    """Todo:
+    update providers and banners classes
+    to update views to use base UpdateInstanceView
+    """
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        clean = form.cleaned_data
+        for k, v in clean.items():
+            setattr(self.object, k, v)
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+
 class AdminIndexView(StaffuserRequiredMixin, TemplateView):
     """
     The admin Index view.
@@ -30,7 +44,7 @@ class CreateWebsite(StaffuserRequiredMixin, CreateView):
     """
     model = Website
 
-class UpdateWebsite(StaffuserRequiredMixin, UpdateView):
+class UpdateWebsite(StaffuserRequiredMixin, UpdateInstanceView):
     """
     Updates a website.
     """
@@ -59,7 +73,7 @@ class CreateWebsitePage(StaffuserRequiredMixin, CreateView):
     """
     model = WebsitePage
 
-class UpdateWebsitePage(StaffuserRequiredMixin, UpdateView):
+class UpdateWebsitePage(StaffuserRequiredMixin, UpdateInstanceView):
     """
     Updates a website page.
     """
@@ -89,7 +103,7 @@ class CreateRecentSearches(StaffuserRequiredMixin, CreateView):
     """
     model = RecentSearches
 
-class UpdateRecentSearches(StaffuserRequiredMixin, UpdateView):
+class UpdateRecentSearches(StaffuserRequiredMixin, UpdateInstanceView):
     """
     Updates a website page.
     """
