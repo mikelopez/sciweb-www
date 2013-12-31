@@ -5,16 +5,46 @@
 {% block websitepage-tab %}active{% endblock %}
 
 {% block detail_view %}
-	
-    <b>Website Page:</b> {{object.title}}<br />
 
-    <hr />
-    <b>Template:</b> {{object.template}}<br /><br />
-    <b>Website:</b> {{object.website.domain}}<br />
-    <b>URL:</b> http://{{object.website.domain}}/{{object.name}}<br /><br />
+	<div class="pull-left" style="width:400px;">
+        <b>Website Page:</b> {{object.title}}<br />
+        <b>Template:</b> {{object.template}}<br /><br />
+        <b>Website:</b> {{object.website.domain}}<br />
+        <b>URL:</b> http://{{object.website.domain}}/{{object.name}}<br /><br />
+    </div>
+    
+    <div class="pull-right" style="width:400px;">
+        
+         {% if object.show_productlinks %}
+            <i class="fa fa-check fa-1x" style="color:green;"></i>
+            <!--span class="label label-success">Active</span-->
+          {% else %}
+          <i class="fa fa-ban fa-1x" style="color:red;"></i>
+            <!--span class="label label-danger">Inactive</span-->
+        {% endif %} <b>Display Product Links</b><br />
+        
+        {% if object.show_categories %}
+            <i class="fa fa-check fa-1x" style="color:green;"></i>
+            <!--span class="label label-success">Active</span-->
+          {% else %}
+          <i class="fa fa-ban fa-1x" style="color:red;"></i>
+            <!--span class="label label-danger">Inactive</span-->
+        {% endif %} &nbsp;<b>Display Categories</b><br /><br />
+    
+        <b>Filter Category:</b>
+        {% if object.filter_category %}
+           {{object.filter_category}}
+        {% endif %}<br />
+        <b>Filter Provider:</b>
+        {% if object.filter_provider %}
+           {{object.filter_provider}}
+        {% endif %}<br />
+    </div>
+    <div class="linebreak10"></div><hr />
+    
     <input type="button" class="btn btn-danger pull-left" value="Edit" 
                 onclick="window.location='{% url 'websitepage_update' pk=object.pk %}';"/>
-    <br />
+    <br /><br /><hr />
 
 
 {% endblock %}

@@ -11,7 +11,7 @@
 {% block inventory-tab %}active{% endblock %}
 
 
-{% block form_submit_to %}{% url 'productlink_update' %}{% endblock %}
+{% block form_submit_to %}{% url 'productlink_update' pk=object.id %}{% endblock %}
 {% block add_website_form %}
     <table width="650">
       {{form.as_table}}

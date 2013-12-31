@@ -8,7 +8,8 @@ from django.core.urlresolvers import reverse, resolve
 from django.template import RequestContext, loader, Context
 from datetime import datetime
 
-from mainweb.models import Website, WebsitePage, RecentSearches, RecentProducts
+from mainweb.models import Website, WebsitePage, RecentSearches, RecentProducts, \
+                            ProductLinks, Provider, MainCategory
 #from products.models import Product
 #from lib.mainlogger import LoggerLog
 from utils import get_meta_domain, shopzilla_search, shopzilla_compare
@@ -103,10 +104,17 @@ class PageProcessor(object):
             'pagetype': None,
             'shopzilla_products': None,
             'shopzilla_categories': None,
-            'shopzilla_subcategories': None
+            'shopzilla_subcategories': None,
+            'product': None,
+            'products': None,
+            'categories': None,
+            'category': None,
         }
         for k, v in data.items():
-            data[k] = getattr(self, k)
+            try:
+                data[k] = getattr(self, k)
+            except AttributeError:
+                data[k] = None
         return data
 
     def process_page(self):
@@ -124,14 +132,16 @@ class PageProcessor(object):
         self.website = self.get_website()
 
         # check if index page or not, set to index if linkname is None
-        self.get_index()
+        self.set_index()
+        # get the sitepage, if its index, the index site page should exist
         page = self.get_websitepage()
         self.pagetype = page.type
         self.template = page.template
-        # call the pagetype method of action
-        self.process_pagetype()
 
-    def process_pagetype(self):
+        # add additional stuff to the context
+        self.process_pagename()
+
+    def process_pagename(self):
         """
         Process and call the predefined method 
         for a specific page type
@@ -139,68 +149,67 @@ class PageProcessor(object):
         """
         SSFQ = SHOPZILLA_SEARCH_FREQUENCY
         RS = RecentSearches
-        if self.pagetype == 'static-arg':
-            #self.static_arg_page()
-            if self.linkname == SHOP_SEARCH:
-                searchfor = self.filtername
-                rs = RS.objects.check_search(search=searchfor, network='shopzilla')
-                if not rs:
-                    self.shopzilla_products, \
-                    self.shopzilla_subcategories = \
-                            shopzilla_search(SHOPZILLA_PUB_TOKEN, 
-                                             SHOPZILLA_TOKEN, 
-                                             self.filtername,
-                                             debug=True, 
-                                             debug_filename=SHOPZILLA_OUTPUT_FILE)
-                    rs = RS.objects.record_search(search=searchfor,
-                              network='shopzilla',
-                              ip=self.request.META.get('REMOTE_ADDR'),
-                              response_data=simplejson.dumps(self.shopzilla_products))
-                    rs.save()
-                else:
-                    # dont query the API, load from the database ;)
-                    self.shopzilla_products = simplejson.loads(rs.response_data)
+        pagenames = [SHOP_SEARCH, SHOP_COMPARE, 'product']
 
-            if self.linkname == SHOP_COMPARE:
-                searchfor = self.filtername
-                RP = RecentProducts
-                rp = RP.objects.check_search(product_id=searchfor, network='shopzilla')
-                if not rp:
-                    print "Not saved...."
-                    self.shopzilla_products, \
-                    self.shopzilla_subcategories = \
-                            shopzilla_compare(SHOPZILLA_PUB_TOKEN, 
-                                              SHOPZILLA_TOKEN, 
-                                              self.filtername, 
-                                              debug=True, 
-                                              debug_filename=SHOPZILLA_OUTPUT_FILE)
-                    rp = RP.objects.record_search(product_id=searchfor,
-                              network='shopzilla',
-                              ip=self.request.META.get('REMOTE_ADDR'),
-                              response_data=simplejson.dumps(self.shopzilla_products))
-                    rp.save()
-                else:
-                    print "Saved..."
-                    self.shopzilla_products = simplejson.loads(rp.response_data)
+        if self.linkname == SHOP_SEARCH:
+            searchfor = self.filtername
+            rs = RS.objects.check_search(search=searchfor, network='shopzilla')
+            if not rs:
+                self.shopzilla_products, \
+                self.shopzilla_subcategories = \
+                        shopzilla_search(SHOPZILLA_PUB_TOKEN, 
+                                         SHOPZILLA_TOKEN, 
+                                         self.filtername,
+                                         debug=True, 
+                                         debug_filename=SHOPZILLA_OUTPUT_FILE)
+                rs = RS.objects.record_search(search=searchfor,
+                          network='shopzilla',
+                          ip=self.request.META.get('REMOTE_ADDR'),
+                          response_data=simplejson.dumps(self.shopzilla_products))
+                rs.save()
+            else:
+                # dont query the API, load from the database ;)
+                self.shopzilla_products = simplejson.loads(rs.response_data)
 
-        if self.pagetype == 'static':
-            #self.static_page()
-            pass
-        if self.pagetype == 'index':
-            #self.index_page()
-            pass
-        if self.pagetype == 'sub-landing':
-            #self.sub_landing_page()
-            pass
+        if self.linkname == SHOP_COMPARE:
+            searchfor = self.filtername
+            RP = RecentProducts
+            rp = RP.objects.check_search(product_id=searchfor, network='shopzilla')
+            if not rp:
+                print "Not saved...."
+                self.shopzilla_products, \
+                self.shopzilla_subcategories = \
+                        shopzilla_compare(SHOPZILLA_PUB_TOKEN, 
+                                          SHOPZILLA_TOKEN, 
+                                          self.filtername, 
+                                          debug=True, 
+                                          debug_filename=SHOPZILLA_OUTPUT_FILE)
+                rp = RP.objects.record_search(product_id=searchfor,
+                          network='shopzilla',
+                          ip=self.request.META.get('REMOTE_ADDR'),
+                          response_data=simplejson.dumps(self.shopzilla_products))
+                rp.save()
+            else:
+                print "Saved..."
+                self.shopzilla_products = simplejson.loads(rp.response_data)
 
-    def get_index(self):
+        if self.linkname == 'product':
+            # get the product
+            self.get_product()
+
+        # any other page (including index)
+        if not self.linkname in pagenames:
+            self.fetch_page()
+
+
+    def set_index(self):
         """
-        This will get the index page if no linkname is found
-        otherwise, return None
+        This will get the index page if no linkname is found.
         """
         if not self.linkname:
             self.linkname = 'index'
-        
+
+
     def get_website(self, force=True):
         """
         Get the website
@@ -227,7 +236,7 @@ class PageProcessor(object):
         Get the website page
         if website page is set, return self.WebsitePage
         if force is true, and website page is set, override it
-        if no linkname is found, index must be set by calling self.get_index()
+        if no linkname is found, index must be set by calling self.set_index()
         """
         if self.websitepage:
             if not force:
@@ -241,6 +250,24 @@ class PageProcessor(object):
             self.websitepage = WebsitePage.objects.filter(website=self.website, name=self.linkname)[0]
         return self.websitepage
 
+    def fetch_page(self):
+        """
+        Fetches a pages data according to rules.
+        """
+        filters = {'active': True}
+        redirect_to = self.websitepage.redirects_to
+        show_productlinks = self.websitepage.show_productlinks
+        filter_provider = self.websitepage.filter_provider
+        filter_category = self.websitepage.filter_category
+        if redirect_to:
+            return HttpResponseRedirect(redirect_to)
+        if show_productlinks:
+            if filter_provider:
+                filters['provider'] = filter_provider
+            if filter_category:
+                filters['category'] = filter_category
+            self.products = ProductLinks.objects.filter(**filters)
+
 
     def get_domain(self):
         """
@@ -248,11 +275,17 @@ class PageProcessor(object):
         """
         return get_meta_domain(self.request)
 
-    def get_product(self, product=None):
+    def get_product(self):
         """
         Get a product 
         """
-        pass            
+        # get the product
+        pid = self.request.GET.get('p', self.filtername)
+        self.product = ProductLinks.objects.getbypk(pid)
+        # try by filter name
+        if not getattr(self, 'product'):
+            self.product = ProductLinks.objects.getbyfiltername(pid)
+
 
     def get_article(self, article=None):
         """
@@ -265,7 +298,6 @@ class PageProcessor(object):
         Search.
         """
         pass
-        #self.logger.write('searching....')
 
     def get_template(self):
         """

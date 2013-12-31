@@ -119,6 +119,7 @@ class WebsitePage(models.Model):
     filter_category = models.ForeignKey('MainCategory', blank=True, null=True)
     filter_provider = models.ForeignKey('Provider', blank=True, null=True)
     paginate_by = models.IntegerField(blank=True, null=True, default=10)
+    active = models.NullBooleanField(blank=True, null=True, default=False)
     class Meta:
         ordering = ('website',)
 
@@ -292,6 +293,21 @@ class MainCategory(models.Model):
                                     .replace('"', '').lower()
         super(MainCategory, self).save()
     
+class ProductLinksManager(models.Manager):
+    @classmethod
+    def getbypk(self, pk):
+        try:
+            return ProductLinks.objects.get(pk=pk)
+        except (ValueError, ProductLinks.DoesNotExist):
+            return None
+        return None
+    @classmethod
+    def getbyfiltername(self, filtername):
+        try:
+            return ProductLinks.objects.get(filter_name=filtername)
+        except (ValueError, ProductLinks.DoesNotExist):
+            return None
+        return None
 
 class ProductLinks(models.Model):
     """Keep track of manuallly added product links."""
@@ -303,6 +319,7 @@ class ProductLinks(models.Model):
     active = models.NullBooleanField(null=True, blank=True, default=False)
     category = models.ForeignKey('MainCategory', blank=True, null=True)
     provider = models.ForeignKey('Provider', blank=True, null=True)
+    objects = ProductLinksManager()
     @property
     def thumb(self):
         if self.thumb_url:

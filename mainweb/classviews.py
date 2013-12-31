@@ -222,9 +222,9 @@ class UpdateProductLinks(StaffuserRequiredMixin, UpdateInstanceView):
     """
     model = ProductLinks
     form_class = ProductLinksForm
-    template_name = "mainweb/category_update.html"
+    template_name = "mainweb/productlinks_update.html"
     def get_object(self, queryset=None):
-        obj = ProductLinks.objects.get(id=self.kwargs['pk'])
+        obj = ProductLinks.objects.get(pk=self.kwargs['pk'])
         return obj
     
 class ProductLinksDetailView(StaffuserRequiredMixin, DetailView):
