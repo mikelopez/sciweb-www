@@ -38,35 +38,6 @@ class MainwebTestCase(BaseTestCase):
         wp.save()
         self.assertEquals(getattr(wp, 'type'), "index")
 
-    def test_sitepage_name_in_staticpages(self):
-        """When the name of the sitepage is the name
-        of a staticpage, it will set the type to static."""
-        wp = WebsitePage(website=self.create_website(),
-                        title="My site", name="products",
-                        template="index.html")
-        wp.save()
-        self.assertEquals(getattr(wp, 'type'), "static")
-        
-    def test_sitepage_name_in_staticargpages(self):
-        """When the name of the sitepage is the name
-        of a static-arg-page, it will set the type to 
-        static-arg."""
-        wp = WebsitePage(website=self.create_website(),
-                        title="My site", name="search",
-                        template="index.html")
-        wp.save()
-        self.assertEquals(getattr(wp, 'type'), "static-arg")
-
-    def test_sitepage_default_type(self):
-        """Tests the default type for a sitepage given the 
-        type is not selected."""
-        wp = WebsitePage(website=self.create_website(),
-                        title="My site", name="Somepage",
-                        template="index.html")
-        wp.save()
-        self.assertEquals(getattr(wp, 'type'), "sub-landing")
-
- 
     def test_website_domain_fix(self):
         """Strips out any special characters from the url leaving
         it as domainname.com from http://www.domainname.com
