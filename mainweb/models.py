@@ -147,19 +147,6 @@ class WebsitePage(models.Model):
         # override title if nothing is set
         if not self.title:
             self.title = self.name
-
-        # do not allow page names of static URLS
-        if self.name in STATIC_PAGES:
-            self.type = 'static'
-            #raise ValidationError('Page name cannot be in static pages: %s' % str([x for x in STATIC_PAGES]))
-        if self.name in STATIC_ARG_PAGES:
-            self.type = 'static-arg'
-            #raise ValidationError('Page name cannot be in static pages: %s' % str([x for x in STATIC_ARG_PAGES]))
-        # make sure name is a static arg page or notify available static arg page names
-        if self.type == 'static-arg':
-            if not self.name in STATIC_ARG_PAGES:
-                raise ValidationError('Name not in static arg pages, select a different page type. \
-                    Allowed Static Arg Pages are: %s' % STATIC_ARG_PAGES)
             
         # just incase
         if not self.type:
