@@ -25,7 +25,7 @@
       </td>
       <td><a href="{% url 'productlink_detail' pk=i.id %}">{{ i.name }}</a></td>
       <td>{{i.filter_name}}</td>
-      <td>{{i.link}}</td>
+      <td><a target="_blank" href="{{i.link}}">GO</a></td>
     </tr>
     {% endfor %}
    </table>
