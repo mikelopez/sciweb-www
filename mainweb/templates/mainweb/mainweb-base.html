@@ -41,19 +41,36 @@
                 <a class="brand" href="{% url 'website_view' %}">{% block project_name %}Sciweb - mainweb{% endblock %}</a>
                 <div class="nav-collapse">
                   <ul class="nav">
-                      <li><a href="{% url 'adminview' %}">Home</a></li>
-                    <li class="{% block website-tab %}{% endblock %}"><a href="{% url 'website_view' %}">Websites</a></li>
-                    <li class="{% block websitepage-tab %}{% endblock %}"><a href="{% url 'websitepage_view' %}">Site Pages</a></li>
+                      <li class="{% block home-tab %}{% endblock %}"><a href="{% url 'adminview' %}">Home</a></li>
+                    
+                    <li class="{% block websit-tab %}{% endblock %}"><a href="{% url 'website_view' %}">Websites</a></li>
                     <li class="{% block recentsearches-tab %}{% endblock %}"><a href="{% url 'recentsearches_view' %}">Recent Searches</a></li>
+                    <li class="{% block inventory-tab %}{% endblock %}"><a href="{% url 'linkprovider_view' %}">Inventory</a></li>
+                    
                     <li class="dropdown">
-                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">Add <b class="caret"></b></a>
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">More <b class="caret"></b></a>
                       <ul class="dropdown-menu">
+
                          {% block add_stuff_dropdown %}
-                         <li><a href="{% url 'website_add' %}">Add Website</a></li>
-                            <li><a href="{% url 'websitepage_add' %}">Add Website Pages</a></li>
+                            <li class="divider"></li>
+                            <li><a href="{% url 'website_view' %}">Websites</a></li>
+                            <li><a href="{% url 'website_add' %}"><b>+</b> New Website</a></li>
+                            <li class="divider"></li>
+                            <li><a href="{% url 'websitepage_view' %}">Website Pags</a></li>
+                            <li><a href="{% url 'websitepage_add' %}"><b>+</b> New Website Pages</a></li>
+                            <li class="divider"></li>
+                            <li><a href="{% url 'maincategory_view' %}">Categories</a></li>
+                            <li><a href="{% url 'maincategory_add' %}"><b>+</b> Categories</a></li>
+                            <li class="divider"></li>
+                            <li><a href="{% url 'productlink_view' %}">Product Links</a></li>
+                            <li><a href="{% url 'productlink_add' %}"><b>+</b> New Product Links</a></li>
+                            <li class="divider"></li>
+                            <li><a href="{% url 'linkprovider_view' %}">Providers</a></li>
+                            <li><a href="{% url 'linkprovider_add' %}"><b>+</b> New Providers</a></li>
+
                          {% endblock %}
-                        <!--li class="divider"></li>
-                        <li><a href="#">Separated link</a></li-->
+                        
+                        <!--li><a href="#">Separated link</a></li-->
                       </ul>
                     </li>
                   </ul>

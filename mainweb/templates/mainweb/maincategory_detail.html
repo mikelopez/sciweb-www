@@ -1,0 +1,39 @@
+{% extends "mainweb/mainweb-base.html" %}
+
+{% block title %}Category {{object.name}}{% endblock %}
+{% block heading %}
+	{% if object.active %} 
+		<i class="fa fa-power-off fa-1x" style="color:green;"></i>&nbsp;
+	{% else %}
+		<i class="fa fa-power-off fa-1x" style="color:red;"></i>&nbsp;
+	{% endif %}
+
+
+Category: {{object.name}}{% endblock %}
+{% block inventory-tab %}active{% endblock %}
+
+{% block detail_view %}
+
+	
+	<div style="width:300px;float:left;font-size:13px;">
+    	<b>Name:</b> {{object.name}}<br /><br />
+    	
+    	<b>Active: </b>
+    	{% if object.active %}
+	        <i class="fa fa-check fa-3x" style="font-size:30px;color:green;"></i>
+	        <!--span class="label label-success">Active</span-->
+	      {% else %}
+	      <i class="fa fa-check fa-3x" style="font-size:30px;color:red;"></i>
+	        <!--span class="label label-danger">Inactive</span-->
+	    {% endif %}
+    	<hr />
+    	
+    </div>
+    
+{% endblock %}
+
+{% block action_button %}
+    <input type="button" class="btn btn-info pull-right" value="Back to Categories" 
+                onclick="window.location='{% url 'maincategory_view' %}';"/>
+{% endblock %}
+

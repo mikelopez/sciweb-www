@@ -1,0 +1,41 @@
+{% extends "mainweb/mainweb-base.html" %}
+
+{% block title %}Provider {{object.name}}{% endblock %}
+{% block heading %}
+	{% if object.active %} 
+		<i class="fa fa-power-off fa-1x" style="color:green;"></i>
+	{% else %}
+		<i class="fa fa-power-off fa-1x" style="color:red;"></i>
+	{% endif %}
+
+
+Provider: {{object.name}}{% endblock %}
+{% block inventory-tab %}active{% endblock %}
+
+{% block detail_view %}
+
+	{% if object.logo %}
+		<img src="{{object.logo}}" /><hr />
+	{% endif %}
+	<div style="width:300px;float:left;font-size:13px;">
+    	<b>Provider:</b> {{object.name}}<br /> - {{object.notes}}<br />
+    	<b>Website Registered: </b> {{ object.website_registered }} <br />
+    	<b>Active: </b> 
+    	{% if object.active %}
+	        <i class="fa fa-check fa-4x" style="color:green;"></i>
+	        <!--span class="label label-success">Active</span-->
+	      {% else %}
+	      <i class="fa fa-check fa-4x" style="color:red;"></i>
+	        <!--span class="label label-danger">Inactive</span-->
+	    {% endif %}
+    	<hr />
+    	
+    </div>
+    
+{% endblock %}
+
+{% block action_button %}
+    <input type="button" class="btn btn-info pull-right" value="Back to Providers" 
+                onclick="window.location='{% url 'linkprovider_view' %}';"/>
+{% endblock %}
+

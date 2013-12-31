@@ -1,0 +1,39 @@
+{% extends "mainweb/mainweb-base.html" %}
+
+{% block title %}Product Links{% endblock %}
+{% block heading %}Product Links{% endblock %}
+{% block inventory-tab %}active{% endblock %}
+
+{% block table_list %}
+
+  <table class="table table-bordered table-striped" style="width:100%;">
+      <tr><td></td><td></td><td>Status</td><td>Name</td><td>Filter Name</td>
+          <td>Link</td>
+      </tr>
+    {% for i in object_list %}
+    <tr>
+      <td><img src="{{i.thumb}}" width="70" height="60" /></td>
+      <td><a href="{% url 'productlink_update' pk=i.id %}"><i class="fa fa-pencil"></i></a></td>
+      <td>
+        {% if i.active %}
+          <i class="fa fa-power-off fa-1x" style="color:green;"></i>
+          <!--span class="label label-success">Active</span-->
+        {% else %}
+        <i class="fa fa-power-off fa-1x" style="color:red;"></i>
+          <!--span class="label label-danger">Inactive</span-->
+        {% endif %} 
+      </td>
+      <td><a href="{% url 'productlink_detail' pk=i.id %}">{{ i.name }}</a></td>
+      <td>{{i.filter_name}}</td>
+      <td>{{i.link}}</td>
+    </tr>
+    {% endfor %}
+   </table>
+
+ {% endblock %}
+
+
+ {% block action_button %}
+    <input type="button" class="btn btn-info pull-right" value="Add Product Link" 
+                onclick="window.location='{% url 'productlink_add' %}';"/>
+{% endblock %}

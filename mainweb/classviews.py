@@ -6,8 +6,9 @@ from django.views.generic import TemplateView, ListView, DetailView, CreateView,
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.conf import settings
-from models import Website, WebsitePage, RecentSearches
-from forms import WebsiteForm, WebsitePageForm, RecentSearchesForm
+from models import Website, WebsitePage, RecentSearches, Provider, MainCategory, ProductLinks
+from forms import WebsiteForm, WebsitePageForm, RecentSearchesForm, ProviderForm, \
+                  MainCategoryForm, ProductLinksForm
 from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 LOG_ON = getattr(settings, "LOG_ON", False)
 
@@ -132,3 +133,105 @@ class RecentSearchesDetailView(StaffuserRequiredMixin, DetailView):
         obj = super(RecentSearchesDetailView, self).get_object(**kwargs)
         return obj
 
+
+# Provider Pages
+class ProviderView(StaffuserRequiredMixin, ListView):
+    """
+    Shows a list of the Provider.
+    """
+    model = Provider
+
+class CreateProvider(StaffuserRequiredMixin, CreateView):
+    """
+    Create a Provider.
+    """
+    model = Provider
+
+class UpdateProvider(StaffuserRequiredMixin, UpdateInstanceView):
+    """
+    Updates a Provider
+    """
+    model = Provider
+    form_class = ProviderForm
+    template_name = "mainweb/provider_update.html"
+    def get_object(self, queryset=None):
+        obj = Provider.objects.get(id=self.kwargs['pk'])
+        return obj
+    
+class ProviderDetailView(StaffuserRequiredMixin, DetailView):
+    """
+    Provider detail view.
+    """
+    queryset = Provider.objects.all()
+    def get_object(self, **kwargs):
+        obj = super(ProviderDetailView, self).get_object(**kwargs)
+        return obj
+
+
+# Category Pages
+class MainCategoryView(StaffuserRequiredMixin, ListView):
+    """
+    Shows a list of the Category.
+    """
+    model = MainCategory
+
+class CreateMainCategory(StaffuserRequiredMixin, CreateView):
+    """
+    Create a MainCategory.
+    """
+    model = MainCategory
+
+class UpdateMainCategory(StaffuserRequiredMixin, UpdateInstanceView):
+    """
+    Updates a MainCategory.
+    """
+    model = MainCategory
+    form_class = MainCategoryForm
+    template_name = "mainweb/maincategory_update.html"
+    def get_object(self, queryset=None):
+        obj = MainCategory.objects.get(id=self.kwargs['pk'])
+        return obj
+    
+class MainCategoryDetailView(StaffuserRequiredMixin, DetailView):
+    """
+    Category detail view.
+    """
+    queryset = MainCategory.objects.all()
+    def get_object(self, **kwargs):
+        obj = super(MainCategoryDetailView, self).get_object(**kwargs)
+        return obj
+
+
+
+# ProductLinks Pages
+class ProductLinksView(StaffuserRequiredMixin, ListView):
+    """
+    Shows a list of the ProductLinks.
+    """
+    model = ProductLinks
+
+class CreateProductLinks(StaffuserRequiredMixin, CreateView):
+    """
+    Create a ProductLinks.
+    """
+    model = ProductLinks
+
+class UpdateProductLinks(StaffuserRequiredMixin, UpdateInstanceView):
+    """
+    Updates a ProductLinks
+    """
+    model = ProductLinks
+    form_class = ProductLinksForm
+    template_name = "mainweb/category_update.html"
+    def get_object(self, queryset=None):
+        obj = ProductLinks.objects.get(id=self.kwargs['pk'])
+        return obj
+    
+class ProductLinksDetailView(StaffuserRequiredMixin, DetailView):
+    """
+    ProductLinks detail view.
+    """
+    queryset = ProductLinks.objects.all()
+    def get_object(self, **kwargs):
+        obj = super(ProductLinksDetailView, self).get_object(**kwargs)
+        return obj

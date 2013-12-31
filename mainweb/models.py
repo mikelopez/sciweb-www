@@ -114,6 +114,11 @@ class WebsitePage(models.Model):
     type = models.CharField(max_length=15, choices=PAGETYPES, default='sub-landing')
     template = models.CharField(max_length=50, blank=True, null=True)
     redirects_to = models.CharField(**custom_blankfield)
+    show_categories = models.NullBooleanField(blank=True, null=True, default=False)
+    show_productlinks = models.NullBooleanField(blank=True, null=True, default=False)
+    filter_category = models.ForeignKey('MainCategory', blank=True, null=True)
+    filter_provider = models.ForeignKey('Provider', blank=True, null=True)
+    paginate_by = models.IntegerField(blank=True, null=True, default=10)
     class Meta:
         ordering = ('website',)
 
@@ -255,3 +260,80 @@ class RecentProducts(models.Model):
     response_data = models.TextField(blank=True, null=True)
     objects = RecentProductsManager()
 
+
+# Products and Links Models
+class Provider(models.Model):
+    """Provider class"""
+    active = models.NullBooleanField(null=True, blank=True, default=False)
+    name = models.CharField(max_length=100)
+    filter_name = models.CharField(max_length=100, blank=True, null=True)
+    login = models.CharField(max_length=50)
+    website_registered = models.ForeignKey('Website')
+    logo = models.TextField(blank=True, null=True)
+    def __str__(self):
+        return str(self.name)
+    def __unicode__(self):
+        return unicode(self.name)
+    def get_absolute_url(self):
+        return reverse('linkprovider_detail', kwargs={'pk': self.pk})
+    def save(self):
+        self.filter_name = self.name.replace(' ', '-')\
+                                    .replace('.', '-')\
+                                    .replace('&', '-and-')\
+                                    .replace('$', '')\
+                                    .replace("'", "")\
+                                    .replace('"', '').lower()
+        super(Provider, self).save()
+    
+
+class MainCategory(models.Model):
+    active = models.NullBooleanField(null=True, blank=True, default=False)
+    name = models.CharField(max_length=100)
+    filter_name = models.CharField(max_length=100, blank=True, null=True)
+    def __str__(self):
+        return str(self.name)
+    def __unicode__(self):
+        return unicode(self.name)
+    def get_absolute_url(self):
+        return reverse('maincategory_detail', kwargs={'pk': self.pk})
+    def save(self):
+        self.filter_name = self.name.replace(' ', '-')\
+                                    .replace('.', '-')\
+                                    .replace('&', '-and-')\
+                                    .replace('$', '')\
+                                    .replace("'", "")\
+                                    .replace('"', '').lower()
+        super(MainCategory, self).save()
+    
+
+class ProductLinks(models.Model):
+    """Keep track of manuallly added product links."""
+    name = models.CharField(max_length=100)
+    filter_name = models.CharField(max_length=100, blank=True, null=True)
+    link = models.TextField()
+    thumb_url = models.TextField(blank=True, null=True)
+    thumb_image = models.TextField(blank=True, null=True)
+    active = models.NullBooleanField(null=True, blank=True, default=False)
+    category = models.ForeignKey('MainCategory', blank=True, null=True)
+    provider = models.ForeignKey('Provider', blank=True, null=True)
+    @property
+    def thumb(self):
+        if self.thumb_url:
+            return self.thumb_url
+        return self.thumb_image
+    def get_absolute_url(self):
+        return reverse('productlink_detail', kwargs={'pk': self.pk})
+    def __str__(self):
+        return str(self.name)
+    def __unicode__(self):
+        return unicode(self.name)
+    def save(self):
+        self.filter_name = self.name.replace(' ', '-')\
+                                    .replace('.', '-')\
+                                    .replace('&', '-and-')\
+                                    .replace('$', '')\
+                                    .replace("'", "")\
+                                    .replace('"', '').lower()
+        super(ProductLinks, self).save()
+    
+    
