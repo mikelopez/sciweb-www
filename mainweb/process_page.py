@@ -109,6 +109,7 @@ class PageProcessor(object):
             'products': None,
             'categories': None,
             'category': None,
+            'page_obj': None
         }
         for k, v in data.items():
             try:
@@ -266,7 +267,11 @@ class PageProcessor(object):
                 filters['provider'] = filter_provider
             if filter_category:
                 filters['category'] = filter_category
-            self.products = ProductLinks.objects.filter(**filters)
+            pagenum = self.request.GET.get('page', int(1))
+            pg = Paginator(ProductLinks.objects.filter(**filters), \
+                           self.websitepage.paginate_by).page(pagenum)
+            self.page_obj = pg
+            self.products = self.page_obj.object_list
 
 
     def get_domain(self):

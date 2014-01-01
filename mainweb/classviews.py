@@ -11,13 +11,18 @@ from forms import WebsiteForm, WebsitePageForm, RecentSearchesForm, ProviderForm
                   MainCategoryForm, ProductLinksForm
 from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 LOG_ON = getattr(settings, "LOG_ON", False)
-
+MODULES = getattr(settings, "MODULES", ())
 
 class UpdateInstanceView(UpdateView):
     """Todo:
     update providers and banners classes
     to update views to use base UpdateInstanceView
     """
+    def get_context_data(self, **kwargs):
+        context = super(UpdateInstanceView, self).get_context_data(**kwargs)
+        context['extmodules'] = MODULES
+        return context
+
     def form_valid(self, form):
         self.object = form.save(commit=False)
         clean = form.cleaned_data
@@ -25,6 +30,30 @@ class UpdateInstanceView(UpdateView):
             setattr(self.object, k, v)
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
+
+
+class BaseListView(ListView):
+    def get_context_data(self, **kwargs):
+        context = super(BaseListView, self).get_context_data(**kwargs)
+        context['extmodules'] = MODULES
+        return context
+
+class BaseCreateView(CreateView):
+    def get_context_data(self, **kwargs):
+        context = super(BaseCreateView, self).get_context_data(**kwargs)
+        context['extmodules'] = MODULES
+        return context
+
+class BaseDetailView(DetailView):
+    """
+    Base Detail Page View.
+    """
+    #queryset = Website.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super(BaseDetailView, self).get_context_data(**kwargs)
+        context['extmodules'] = MODULES
+        return context
 
 
 class AdminIndexView(StaffuserRequiredMixin, TemplateView):
@@ -35,13 +64,13 @@ class AdminIndexView(StaffuserRequiredMixin, TemplateView):
 
 
 # Websites
-class WebsiteView(StaffuserRequiredMixin, ListView):
+class WebsiteView(StaffuserRequiredMixin, BaseListView):
     """
     Shows the list of websites.
     """
     model = Website
 
-class CreateWebsite(StaffuserRequiredMixin, CreateView):
+class CreateWebsite(StaffuserRequiredMixin, BaseCreateView):
     """
     Create a new Website.
     """
@@ -58,7 +87,7 @@ class UpdateWebsite(StaffuserRequiredMixin, UpdateInstanceView):
         obj = Website.objects.get(id=self.kwargs['pk'])
         return obj
     
-class WebsiteDetailView(StaffuserRequiredMixin, DetailView):
+class WebsiteDetailView(StaffuserRequiredMixin, BaseDetailView):
     """
     Website Detail Page View.
     """
@@ -69,13 +98,13 @@ class WebsiteDetailView(StaffuserRequiredMixin, DetailView):
 
 
 # Website Pages
-class WebsitePageView(StaffuserRequiredMixin, ListView):
+class WebsitePageView(StaffuserRequiredMixin, BaseListView):
     """
     Shows a list of the website-pages.
     """
     model = WebsitePage
 
-class CreateWebsitePage(StaffuserRequiredMixin, CreateView):
+class CreateWebsitePage(StaffuserRequiredMixin, BaseCreateView):
     """
     Create a website-page.
     """
@@ -92,7 +121,7 @@ class UpdateWebsitePage(StaffuserRequiredMixin, UpdateInstanceView):
         obj = WebsitePage.objects.get(id=self.kwargs['pk'])
         return obj
     
-class WebsitePageDetailView(StaffuserRequiredMixin, DetailView):
+class WebsitePageDetailView(StaffuserRequiredMixin, BaseDetailView):
     """
     Website-page detail view.
     """
@@ -104,13 +133,13 @@ class WebsitePageDetailView(StaffuserRequiredMixin, DetailView):
 
 
 # RecentSearches
-class RecentSearchesView(StaffuserRequiredMixin, ListView):
+class RecentSearchesView(StaffuserRequiredMixin, BaseListView):
     """
     Shows a list of the website-pages.
     """
     model = RecentSearches
 
-class CreateRecentSearches(StaffuserRequiredMixin, CreateView):
+class CreateRecentSearches(StaffuserRequiredMixin, BaseCreateView):
     """
     Create a website-page.
     """
@@ -124,7 +153,7 @@ class UpdateRecentSearches(StaffuserRequiredMixin, UpdateInstanceView):
     form_class = RecentSearchesForm
     template_name = "mainweb/recentsearches_update.html"
     
-class RecentSearchesDetailView(StaffuserRequiredMixin, DetailView):
+class RecentSearchesDetailView(StaffuserRequiredMixin, BaseDetailView):
     """
     Website-page detail view.
     """
@@ -135,13 +164,13 @@ class RecentSearchesDetailView(StaffuserRequiredMixin, DetailView):
 
 
 # Provider Pages
-class ProviderView(StaffuserRequiredMixin, ListView):
+class ProviderView(StaffuserRequiredMixin, BaseListView):
     """
     Shows a list of the Provider.
     """
     model = Provider
 
-class CreateProvider(StaffuserRequiredMixin, CreateView):
+class CreateProvider(StaffuserRequiredMixin, BaseCreateView):
     """
     Create a Provider.
     """
@@ -158,7 +187,7 @@ class UpdateProvider(StaffuserRequiredMixin, UpdateInstanceView):
         obj = Provider.objects.get(id=self.kwargs['pk'])
         return obj
     
-class ProviderDetailView(StaffuserRequiredMixin, DetailView):
+class ProviderDetailView(StaffuserRequiredMixin, BaseDetailView):
     """
     Provider detail view.
     """
@@ -169,13 +198,13 @@ class ProviderDetailView(StaffuserRequiredMixin, DetailView):
 
 
 # Category Pages
-class MainCategoryView(StaffuserRequiredMixin, ListView):
+class MainCategoryView(StaffuserRequiredMixin, BaseListView):
     """
     Shows a list of the Category.
     """
     model = MainCategory
 
-class CreateMainCategory(StaffuserRequiredMixin, CreateView):
+class CreateMainCategory(StaffuserRequiredMixin, BaseCreateView):
     """
     Create a MainCategory.
     """
@@ -192,7 +221,7 @@ class UpdateMainCategory(StaffuserRequiredMixin, UpdateInstanceView):
         obj = MainCategory.objects.get(id=self.kwargs['pk'])
         return obj
     
-class MainCategoryDetailView(StaffuserRequiredMixin, DetailView):
+class MainCategoryDetailView(StaffuserRequiredMixin, BaseDetailView):
     """
     Category detail view.
     """
@@ -204,13 +233,13 @@ class MainCategoryDetailView(StaffuserRequiredMixin, DetailView):
 
 
 # ProductLinks Pages
-class ProductLinksView(StaffuserRequiredMixin, ListView):
+class ProductLinksView(StaffuserRequiredMixin, BaseListView):
     """
     Shows a list of the ProductLinks.
     """
     model = ProductLinks
 
-class CreateProductLinks(StaffuserRequiredMixin, CreateView):
+class CreateProductLinks(StaffuserRequiredMixin, BaseCreateView):
     """
     Create a ProductLinks.
     """
@@ -227,7 +256,7 @@ class UpdateProductLinks(StaffuserRequiredMixin, UpdateInstanceView):
         obj = ProductLinks.objects.get(pk=self.kwargs['pk'])
         return obj
     
-class ProductLinksDetailView(StaffuserRequiredMixin, DetailView):
+class ProductLinksDetailView(StaffuserRequiredMixin, BaseDetailView):
     """
     ProductLinks detail view.
     """
