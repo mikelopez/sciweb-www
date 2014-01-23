@@ -177,7 +177,6 @@ class PageProcessor(object):
             RP = RecentProducts
             rp = RP.objects.check_search(product_id=searchfor, network='shopzilla')
             if not rp:
-                print "Not saved...."
                 self.shopzilla_products, \
                 self.shopzilla_subcategories = \
                         shopzilla_compare(SHOPZILLA_PUB_TOKEN, 
@@ -191,7 +190,6 @@ class PageProcessor(object):
                           response_data=simplejson.dumps(self.shopzilla_products))
                 rp.save()
             else:
-                print "Saved..."
                 self.shopzilla_products = simplejson.loads(rp.response_data)
 
         if self.linkname == 'product':

@@ -41,9 +41,7 @@ def shopzilla_search(pubtoken, token, search_for, debug=False, debug_filename=No
     shop.read_response(debug=debug, debug_filename=debug_filename)
     try:
         shop.parse_json()
-        print "!!!!!!!! PARSED JSON OK"
     except:
-        print "!!!!!!!!!!! FAILED TO PARSE JSON"
         shop.json_data = shop.response_data
 
     affiliated_products = shop.json_data
