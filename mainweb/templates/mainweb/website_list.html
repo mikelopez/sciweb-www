@@ -19,7 +19,7 @@
       <i class="fa fa-power-off fa-1x" style="color:red;"></i>
         <!--span class="label label-danger">Inactive</span-->
       {% endif %} </td>
-      <td><a href="/mainweb/website/{{i.id}}">{{ i.domain }}</a> </td>
+  <td><a href="{% url 'website_view' %}/{{i.id}}">{{ i.domain }}</a> </td>
       <td>{{i.notes}}</td>
     </tr>
     {% endfor %}

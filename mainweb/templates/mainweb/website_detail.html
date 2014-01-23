@@ -24,7 +24,7 @@ Website: {{object.domain}}{% endblock %}
 		<table class="table table-bordered table-striped" style="font-size:12px;">
 			{% for i in object.websitepage_set.select_related %}
 				<tr>
-					<td>{{i.name}}</td>
+                    <td><a href="{% url 'websitepage_view' %}/{{i.id}} ">{{i.name}}</a></td>
 					<td>{{i.title}}</td>
 					<td>{{i.type}}</td>
 					<td>{{i.template}}</td>
